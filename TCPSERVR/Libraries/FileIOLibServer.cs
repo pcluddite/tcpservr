@@ -1,4 +1,9 @@
-﻿using Tbasic.Libraries;
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
+using Tbasic.Libraries;
 using Tbasic.Runtime;
 using Tcpservr.Core;
 using Tcpservr.Messaging;

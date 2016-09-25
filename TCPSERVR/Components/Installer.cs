@@ -1,12 +1,14 @@
-﻿using System;
-using System.Diagnostics;
-using System.Windows.Forms;
-using Tcpservr.Components;
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using Microsoft.Win32;
-using System.IO;
-using System.Text;
-using Tcpservr.Core;
+using System;
+using System.Diagnostics;
 using System.Net;
+using System.Windows.Forms;
+using Tcpservr.Core;
 
 namespace Tcpservr
 {

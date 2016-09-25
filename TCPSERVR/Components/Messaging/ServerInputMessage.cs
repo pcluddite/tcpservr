@@ -1,7 +1,12 @@
-﻿using System;
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using Newtonsoft.Json;
-using Tbasic.Runtime;
+using System;
 using Tbasic.Parsing;
+using Tbasic.Runtime;
 
 namespace Tcpservr.Messaging
 {

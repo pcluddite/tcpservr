@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Tcpservr.Messaging;
-using Tbasic.Errors;
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using System.Collections;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using Tbasic.Errors;
+using Tcpservr.Messaging;
 
 namespace Tcpservr.Threads
 {

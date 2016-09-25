@@ -1,6 +1,11 @@
-﻿using System;
-using System.Text;
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
+using System;
 using System.Security.Principal;
+using System.Text;
 
 namespace Tcpservr.Errors
 {

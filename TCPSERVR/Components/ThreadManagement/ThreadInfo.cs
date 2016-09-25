@@ -1,8 +1,13 @@
-﻿using System;
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
+using System;
 using System.Threading;
-using Tcpservr.Messaging;
-using Tcpservr.Core;
 using Tcpservr.Components;
+using Tcpservr.Core;
+using Tcpservr.Messaging;
 
 namespace Tcpservr.Threads
 {

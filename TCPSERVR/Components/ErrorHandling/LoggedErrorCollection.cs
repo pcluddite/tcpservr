@@ -1,7 +1,12 @@
-﻿using System.Collections.Concurrent;
-using System.Text;
-using System.Collections.Generic;
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Tcpservr.Errors
 {

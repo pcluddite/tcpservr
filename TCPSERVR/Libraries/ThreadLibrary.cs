@@ -1,4 +1,9 @@
-﻿using System;
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
+using System;
 using System.Text;
 using System.Threading;
 using Tbasic.Errors;

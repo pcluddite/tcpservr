@@ -1,10 +1,15 @@
-﻿using System;
-using System.Text;
-using System.Diagnostics;
-using System.Collections.Generic;
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
+using System;
 using System.Collections;
-using Tbasic.Errors;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
+using Tbasic.Errors;
 
 namespace Tcpservr.Threads
 {

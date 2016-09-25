@@ -1,4 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
+using Newtonsoft.Json;
 using System;
 using System.IO.Pipes;
 using System.Net.Sockets;
