@@ -10,4 +10,4 @@ Features include:
 - A shell for connecting and sending single functions to the the server
 - Data is sent and transmitted using JSON instead of the original proprietary binary message
 
-A complete manual for TCPSERVR 1.5 is located at tcpservr/manual.docx, but only portions apply to this version.
+A complete manual for TCPSERVR 1.5 is located at tcpservr/manual.docx, but only portions apply to this version. Old versions are available for reference in tcpservr/archives. These versions should not be used in production. The same license applies to this version and all past versions.
