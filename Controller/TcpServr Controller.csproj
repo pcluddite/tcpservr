@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{579B25C6-66B1-4573-918F-8FE5B6DD10BD}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tcpclient</RootNamespace>
+    <AssemblyName>TcpServr Controller</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>Tcpclient.Program</StartupObject>
+    <ApplicationIcon>Resources\computer.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Components\Settings.cs" />
+    <Compile Include="Components\TMessage.cs" />
+    <Compile Include="Components\TResponse.cs" />
+    <Compile Include="Main\AddMachine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\AddMachine.Designer.cs">
+      <DependentUpon>AddMachine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Application Control\BlockApp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Application Control\BlockApp.Designer.cs">
+      <DependentUpon>BlockApp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\File Manager\New.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\File Manager\New.Designer.cs">
+      <DependentUpon>New.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\File Manager\Properties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\File Manager\Properties.Designer.cs">
+      <DependentUpon>Properties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\File Manager\Rename.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\File Manager\Rename.Designer.cs">
+      <DependentUpon>Rename.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\File Manager\FileManager.cs" />
+    <Compile Include="Main\Message Manager\BlockMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Message Manager\BlockMessage.Designer.cs">
+      <DependentUpon>BlockMessage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Message Manager\Chat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Message Manager\Chat.Designer.cs">
+      <DependentUpon>Chat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Message Manager\MessageManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Message Manager\MsgBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Message Manager\MsgBox.Designer.cs">
+      <DependentUpon>MsgBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Message Manager\Say.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Message Manager\Say.Designer.cs">
+      <DependentUpon>Say.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Message Manager\Tooltip.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Message Manager\Tooltip.Designer.cs">
+      <DependentUpon>Tooltip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\Pipes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\Pipes.Designer.cs">
+      <DependentUpon>Pipes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\DWord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\DWord.Designer.cs">
+      <DependentUpon>DWord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\Key.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\Key.Designer.cs">
+      <DependentUpon>Key.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\MultiString.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\MultiString.Designer.cs">
+      <DependentUpon>MultiString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\QWord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\QWord.Designer.cs">
+      <DependentUpon>QWord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\Rename.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\Rename.Designer.cs">
+      <DependentUpon>Rename.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\String.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Registry Editor\String.Designer.cs">
+      <DependentUpon>String.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Message Manager\Run.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Message Manager\Run.Designer.cs">
+      <DependentUpon>Run.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Window Manager\SendText.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Window Manager\SendText.Designer.cs">
+      <DependentUpon>SendText.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Window Manager\GetScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Window Manager\GetScreen.Designer.cs">
+      <DependentUpon>GetScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Hosts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Hosts.Designer.cs">
+      <DependentUpon>Hosts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\Logger.cs" />
+    <Compile Include="Main\Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\Pass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\Pass.Designer.cs">
+      <DependentUpon>Pass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Window Manager\WindowManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources3.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Window Manager\Details.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Window Manager\Details.Designer.cs">
+      <DependentUpon>Details.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Main\AddMachine.resx">
+      <DependentUpon>AddMachine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Application Control\BlockApp.resx">
+      <DependentUpon>BlockApp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\File Manager\New.resx">
+      <DependentUpon>New.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\File Manager\Properties.resx">
+      <DependentUpon>Properties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\File Manager\Rename.resx">
+      <DependentUpon>Rename.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Message Manager\BlockMessage.resx">
+      <DependentUpon>BlockMessage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Message Manager\Chat.resx">
+      <DependentUpon>Chat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Message Manager\MsgBox.resx">
+      <DependentUpon>MsgBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Message Manager\Say.resx">
+      <DependentUpon>Say.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Message Manager\Tooltip.resx">
+      <DependentUpon>Tooltip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\Pipes.resx">
+      <DependentUpon>Pipes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Registry Editor\DWord.resx">
+      <DependentUpon>DWord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Registry Editor\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Registry Editor\Key.resx">
+      <DependentUpon>Key.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Registry Editor\MultiString.resx">
+      <DependentUpon>MultiString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Registry Editor\QWord.resx">
+      <DependentUpon>QWord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Registry Editor\Rename.resx">
+      <DependentUpon>Rename.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Registry Editor\String.resx">
+      <DependentUpon>String.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Message Manager\Run.resx">
+      <DependentUpon>Run.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Window Manager\SendText.resx">
+      <DependentUpon>SendText.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Window Manager\GetScreen.resx">
+      <DependentUpon>GetScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Hosts.resx">
+      <DependentUpon>Hosts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\Pass.resx">
+      <DependentUpon>Pass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources3.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Window Manager\Details.resx">
+      <DependentUpon>Details.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\upload.png" />
+    <None Include="Resources\paste.png" />
+    <None Include="Resources\rename.png" />
+    <None Include="Resources\recycle.png" />
+    <None Include="Resources\refresh.png" />
+    <None Include="Resources\people small.png" />
+    <None Include="Resources\process small.png" />
+    <None Include="Resources\say small.png" />
+    <None Include="Resources\bat small.png" />
+    <None Include="Resources\block small.png" />
+    <None Include="Resources\check small.png" />
+    <None Include="Resources\block small 2.png" />
+    <None Include="Resources\close small.png" />
+    <None Include="Resources\cam small ico.ico" />
+    <Content Include="Resources\computer.ico" />
+    <None Include="Resources\small cam.png" />
+    <None Include="Resources\run small.png" />
+    <None Include="Resources\Windows-XP-welcome-screen.gif" />
+    <None Include="Resources\Refresh-icon.png" />
+    <None Include="Resources\world.png" />
+    <None Include="Resources\traytip.png" />
+    <None Include="Resources\key.png" />
+    <None Include="Resources\go.png" />
+    <None Include="Resources\go_selected.png" />
+    <None Include="Resources\no small.png" />
+    <None Include="Resources\help small.png" />
+    <None Include="Resources\ok small.png" />
+    <None Include="Resources\envelope small.png" />
+    <None Include="Resources\info small.png" />
+    <None Include="Resources\new folder.png" />
+    <None Include="Resources\delete.png" />
+    <None Include="Resources\copy.png" />
+    <None Include="Resources\cut.png" />
+    <None Include="Resources\download.png" />
+    <None Include="Resources\globe.png" />
+    <None Include="Resources\desktop small icon.ico" />
+    <None Include="Resources\computer.png" />
+    <Content Include="Resources\Oxygen-Icons.org-Oxygen-Categories-applications-internet.ico" />
+    <None Include="app.config" />
+    <None Include="Resources\error.PNG" />
+    <Content Include="Resources\Globe.ico" />
+    <None Include="Resources\warn.PNG" />
+    <None Include="Resources\quest.PNG" />
+    <None Include="Resources\info.PNG" />
+    <None Include="Resources\msgbox.bmp" />
+    <None Include="Resources\Rename-icon.png" />
+    <None Include="Resources\Mimetype-kmultiple-copy_48x48-32.png" />
+    <None Include="Resources\Cut_48x48-32.png" />
+    <None Include="Resources\Actions-window-close_48x48-32.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
