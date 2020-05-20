@@ -83,6 +83,7 @@
     <Compile Include="Components\Installer.cs" />
     <Compile Include="Libraries\FileIOLibServer.cs" />
     <Compile Include="Libraries\PipeLibrary.cs" />
+    <Compile Include="Libraries\Command.cs" />
     <Compile Include="Libraries\ServerLibrary.cs" />
     <Compile Include="Libraries\SlaveLibrary.cs" />
     <Compile Include="Libraries\ThreadLibrary.cs" />
@@ -139,6 +140,10 @@
     <ProjectReference Include="..\..\..\..\..\..\tbasic\tbasic\tbasic.csproj">
       <Project>{86ec7054-1d77-4dee-854f-ad7377fc27aa}</Project>
       <Name>tbasic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tbasic\TBASIC.csproj">
+      <Project>{0e00b454-68c8-4144-b1a5-8120b2740466}</Project>
+      <Name>TBASIC</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

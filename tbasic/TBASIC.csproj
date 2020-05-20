@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0E00B454-68C8-4144-B1A5-8120B2740466}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tbasic</RootNamespace>
+    <AssemblyName>tbasic</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\tbasic.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Speech" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Components\Extensions.cs" />
+    <Compile Include="Components\StringSegment.cs" />
+    <Compile Include="Components\StructReference.cs" />
+    <Compile Include="Components\Win32\GDI32.cs" />
+    <Compile Include="Components\Win32\Impersonate.cs" />
+    <Compile Include="Errors\ErrorCodes.cs" />
+    <Compile Include="Errors\ScriptParsingException.cs" />
+    <Compile Include="Errors\TbasicException.cs" />
+    <Compile Include="Errors\ThrowHelper.cs" />
+    <Compile Include="Libraries\ArrayLibrary.cs" />
+    <Compile Include="Libraries\StringLibrary.cs" />
+    <Compile Include="Libraries\SystemLibrary.cs" />
+    <Compile Include="Operators\BinaryOperator.cs" />
+    <Compile Include="Operators\BinOpDicationary.cs" />
+    <Compile Include="Operators\BinOpDictionary.IDictionary.cs" />
+    <Compile Include="Operators\BinOpNodePair.cs" />
+    <Compile Include="Operators\IOperator.cs" />
+    <Compile Include="Operators\UnaryOpDictionary.cs" />
+    <Compile Include="Operators\UnaryOpDictionary.IDictionary.cs" />
+    <Compile Include="Operators\UnaryOperator.cs" />
+    <Compile Include="Runtime\Parsing\GroupParser.cs" />
+    <Compile Include="Runtime\Evaluator\Evaluator.cs" />
+    <Compile Include="Runtime\Evaluator\BinaryOpQueue.cs" />
+    <Compile Include="Runtime\Evaluator\Function.cs" />
+    <Compile Include="Runtime\Evaluator\IEvaluator.cs" />
+    <Compile Include="Runtime\Parsing\LineCollection.cs" />
+    <Compile Include="Runtime\Parsing\Scanner.cs" />
+    <Compile Include="Runtime\StackFrame\ObjectContext.cs" />
+    <Compile Include="Runtime\Evaluator\Variable.cs" />
+    <Compile Include="Runtime\Executer.cs" />
+    <Compile Include="Libraries\AutoLibrary.cs" />
+    <Compile Include="Libraries\FileIOLibrary.cs" />
+    <Compile Include="Libraries\ProcessLibrary.cs" />
+    <Compile Include="Libraries\RegistryLibrary.cs" />
+    <Compile Include="Libraries\UserIOLibrary.cs" />
+    <Compile Include="Libraries\StatementLibrary.cs" />
+    <Compile Include="Libraries\Library.cs" />
+    <Compile Include="Components\Win32\Win32Window.cs" />
+    <Compile Include="Libraries\MathLibrary.cs" />
+    <Compile Include="Libraries\RuntimeLibrary.cs" />
+    <Compile Include="Blocks\DoBlock.cs" />
+    <Compile Include="Blocks\ForBlock.cs" />
+    <Compile Include="Blocks\FuncBlock.cs" />
+    <Compile Include="Blocks\SelectBlock.cs" />
+    <Compile Include="Blocks\WhileBlock.cs" />
+    <Compile Include="Blocks\IfBlock.cs" />
+    <Compile Include="Blocks\CodeBlock.cs" />
+    <Compile Include="Runtime\Parsing\Line.cs" />
+    <Compile Include="Components\ImageCompression.cs" />
+    <Compile Include="Components\RegistryUtilities.cs" />
+    <Compile Include="Components\ScreenCapture.cs" />
+    <Compile Include="Components\Win32\UnmanagedTypes.cs" />
+    <Compile Include="Components\Win32\User32.cs" />
+    <Compile Include="Components\Win32\WindowEnums.cs" />
+    <Compile Include="Runtime\StackFrame\TFunctionData.cs" />
+    <Compile Include="Components\Win32\Windows.cs" />
+    <Compile Include="Libraries\WindowLibrary.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Errors\LineException.cs" />
+    <Compile Include="Runtime\Types\Number.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blank.ico" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

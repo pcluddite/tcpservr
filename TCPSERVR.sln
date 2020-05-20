@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPSERVR", "TCPSERVR\TCPSER
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.csproj", "{014E986C-90E6-45A4-89C4-FB2BB0AB4D70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TBASIC", "tbasic\TBASIC.csproj", "{0E00B454-68C8-4144-B1A5-8120B2740466}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,26 @@ Global
 		{014E986C-90E6-45A4-89C4-FB2BB0AB4D70}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{014E986C-90E6-45A4-89C4-FB2BB0AB4D70}.Release|x64.ActiveCfg = Release|Any CPU
 		{014E986C-90E6-45A4-89C4-FB2BB0AB4D70}.Release|x86.ActiveCfg = Release|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Debug|ARM.Build.0 = Debug|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Debug|x64.Build.0 = Debug|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Debug|x86.Build.0 = Debug|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Release|ARM.ActiveCfg = Release|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Release|ARM.Build.0 = Release|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Release|x64.ActiveCfg = Release|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Release|x64.Build.0 = Release|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Release|x86.ActiveCfg = Release|Any CPU
+		{0E00B454-68C8-4144-B1A5-8120B2740466}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
