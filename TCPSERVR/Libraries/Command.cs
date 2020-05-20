@@ -5,8 +5,9 @@
 // =====
 namespace TCPSERVR.Libraries
 {
-    internal class Command
+    internal abstract class Command
     {
-        private int ParameterCount { get; }
+//        public abstract bool HasValidParameterCount(StackData stackData);
+//        public abstract ReturnValue Execute(StackData stackData);
     }
 }

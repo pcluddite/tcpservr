@@ -113,7 +113,6 @@
     </Compile>
     <Compile Include="Libraries\StringLibrary.cs" />
     <Compile Include="Libraries\SystemLibrary.cs" />
-    <Compile Include="Parsing\GroupParser.cs" />
     <Compile Include="Parsing\Preprocessors\TerminalPreprocessor.cs" />
     <Compile Include="Parsing\Scanners\CScanner\CScanner.cs" />
     <Compile Include="Parsing\Scanners\DefaultScanner\DefaultScanner.Generated.cs">
