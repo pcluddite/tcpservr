@@ -1,0 +1,119 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".Generated.cs" #>
+// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
+using System;
+
+namespace Tbasic.Types
+{
+	public partial struct Number 
+	{
+<#
+	BuildAllBools();
+	BuildAllMaths();
+	BuildAllConvertibles();
+#>
+        TypeCode IConvertible.GetTypeCode()
+        {
+            return Value.GetTypeCode();
+        }
+
+        object IConvertible.ToType(Type conversionType, IFormatProvider provider)
+        {
+            return ((IConvertible)Value).ToType(conversionType, provider);
+        }
+	}
+}
+
+<#+
+
+private void BuildAllBools()
+{
+	BuildBoolOp("==", "equal to");
+	BuildBoolOp("!=", "not equal to");
+	BuildBoolOp(">", "greater than");
+	BuildBoolOp("<", "less than");
+	BuildBoolOp(">=", "greater than or equal to");
+	BuildBoolOp("<=", "less than or equal to");
+}
+
+private void BuildAllMaths()
+{
+	BuildMathOp("+", "Adds", "to");
+	BuildMathOp("-", "Subtracts", "from");
+	BuildMathOp("*", "Multiplies", "by");
+	BuildMathOp("/", "Divides", "by");
+	BuildMathOp("%", "Performs a modulus operation on", "using");
+}
+
+private void BuildAllConvertibles() // I guess we're Chrystler now
+{
+	BuildConvertible("bool", "Boolean");
+	BuildConvertible("char", "Char");
+	BuildConvertible("sbyte", "SByte");
+	BuildConvertible("byte", "Byte");
+	BuildConvertible("short", "Int16");
+	BuildConvertible("int", "Int32");
+	BuildConvertible("long", "Int64");
+	BuildConvertible("ushort", "UInt16");
+	BuildConvertible("uint", "UInt32");
+	BuildConvertible("ulong", "UInt64");
+	BuildConvertible("float", "Single");
+	BuildConvertible("double", "Double");
+	BuildConvertible("decimal", "Decimal");
+	BuildConvertible("DateTime", "DateTime");
+	BuildConvertible("string", "String");
+}
+
+private void BuildBoolOp(string op, string descrip)
+{
+#>
+        /// <summary>
+        /// Determines if one number is <#= descrip #> another number
+        /// </summary>
+        /// <param name="left">the left operand</param>
+        /// <param name="right">the right operand</param>
+        /// <returns>a boolean value indicating if the expression is true of false</returns>
+        public static bool operator <#= op #>(Number left, Number right)
+        {
+            return left.Value <#= op #> right.Value;
+        }
+
+<#+
+}
+
+private void BuildMathOp(string op, string descrip, string prep)
+{
+#>
+        /// <summary>
+        /// <#= descrip #> one number <#= prep #> another number
+        /// </summary>
+        /// <param name="left">the left operand</param>
+        /// <param name="right">the right operand</param>
+        /// <returns>a Number with the resulting value</returns>
+        public static Number operator <#= op #>(Number left, Number right)
+        {
+            return new Number(left.Value <#= op #> right.Value);
+        }
+
+<#+
+}
+
+private void BuildConvertible(string type, string sigtype) // let's put the top down
+{
+#>
+        <#= type #> IConvertible.To<#= sigtype #>(IFormatProvider provider)
+        {
+            return ((IConvertible)Value).To<#= sigtype #>(provider);
+        }
+
+<#+
+}
+#>

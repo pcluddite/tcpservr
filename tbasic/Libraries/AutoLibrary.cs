@@ -1,30 +1,15 @@
-﻿/**
- *  TBASIC
- *  Copyright (C) 2013-2016 Timothy Baxendale
- *  
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *  
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *  
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *  USA
- **/
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using System;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
-using Tbasic.Win32;
 using Tbasic.Errors;
-using Forms = System.Windows.Forms;
 using Tbasic.Runtime;
+using Tbasic.Win32;
+using Forms = System.Windows.Forms;
 
 namespace Tbasic.Libraries
 {
@@ -33,7 +18,6 @@ namespace Tbasic.Libraries
     /// </summary>
     public class AutoLibrary : Library
     {
-
         /// <summary>
         /// Initializes a new instance of this class
         /// </summary>
@@ -80,42 +64,45 @@ namespace Tbasic.Libraries
             }
         }
 
-        private void MouseClick(TFunctionData _sframe)
+        private object MouseClick(TRuntime runtime, StackData stackdat)
         {
-            if (_sframe.ParameterCount == 4) {
-                _sframe.AddParameter(1);
-                _sframe.AddParameter(1);
+            if (stackdat.ParameterCount == 4) {
+                stackdat.Add(1);
+                stackdat.Add(1);
             }
-            if (_sframe.ParameterCount == 5) {
-                _sframe.AddParameter(5);
+            if (stackdat.ParameterCount == 5) {
+                stackdat.Add(5);
             }
-            _sframe.AssertParamCount(6);
+            stackdat.AssertCount(6);
 
-            int x = _sframe.GetParameter<int>(2),
-                y = _sframe.GetParameter<int>(3),
-                clicks = _sframe.GetParameter<int>(4),
-                speed = _sframe.GetParameter<int>(5);
+            int x = stackdat.Get<int>(2),
+                y = stackdat.Get<int>(3),
+                clicks = stackdat.Get<int>(4),
+                speed = stackdat.Get<int>(5);
 
             MouseButton button;
-            if (_sframe.GetFromEnum(1, "button", "LEFT", "RIGHT").EqualsIgnoreCase("LEFT")) {
+            if (stackdat.GetEnum(1, "button", "LEFT", "RIGHT").EqualsIgnoreCase("LEFT")) {
                 button = MouseButton.Left;
             }
             else {
                 button = MouseButton.Right;
             }
             MouseClick(button, x, y, clicks, speed);
+            return null;
         }
 
-        private void MouseMove(TFunctionData _sframe)
+        private object MouseMove(TRuntime runtime, StackData stackdat)
         {
-            if (_sframe.ParameterCount == 3) {
-                _sframe.AddParameter(1);
+            if (stackdat.ParameterCount == 3) {
+                stackdat.Add(1);
             }
-            _sframe.AssertParamCount(4);
+            stackdat.AssertCount(4);
 
-            MouseMove(_sframe.GetParameter<int>(1),
-                      _sframe.GetParameter<int>(2),
-                      _sframe.GetParameter<int>(3));
+            MouseMove(stackdat.Get<int>(1),
+                      stackdat.Get<int>(2),
+                      stackdat.Get<int>(3));
+
+            return null;
         }
 
         /// <summary>
@@ -168,13 +155,13 @@ namespace Tbasic.Libraries
             return User32.BlockInput(blocked);
         }
 
-        private void BlockInput(TFunctionData _sframe)
+        private object BlockInput(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            _sframe.SetAll(_sframe.GetParameter(0), _sframe.GetParameter(1).ToString().Replace("1", "true").Replace("0", "false"));
-            if (!BlockInput(_sframe.GetParameter<bool>(1))) {
-                _sframe.Status = ErrorClient.Forbidden;
+            stackdat.AssertCount(2);
+            if (!BlockInput(stackdat.Get<bool>(1))) {
+                stackdat.Status = ErrorClient.Forbidden;
             }
+            return null;
         }
 
         /// <summary>
@@ -186,10 +173,11 @@ namespace Tbasic.Libraries
             SendKeys.SendWait(keys);
         }
 
-        private void Send(TFunctionData _sframe)
+        private object Send(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            Send(_sframe.GetParameter<string>(1));
+            stackdat.AssertCount(2);
+            Send(stackdat.Get<string>(1));
+            return null;
         }
 
         /// <summary>
@@ -203,13 +191,14 @@ namespace Tbasic.Libraries
             }
         }
 
-        private void VolumeUp(TFunctionData _sframe)
+        private object VolumeUp(TRuntime runtime, StackData stackdat)
         {
-            if (_sframe.ParameterCount == 1) {
-                _sframe.SetAll(_sframe.GetParameter(0), "1");
+            if (stackdat.ParameterCount == 1) {
+                stackdat.Add(1);
             }
-            _sframe.AssertParamCount(2);
-            VolumeUp(_sframe.GetParameter<int>(1));
+            stackdat.AssertCount(2);
+            VolumeUp(stackdat.Get<int>(1));
+            return null;
         }
 
         /// <summary>
@@ -223,13 +212,14 @@ namespace Tbasic.Libraries
             }
         }
 
-        private void VolumeDown(TFunctionData _sframe)
+        private object VolumeDown(TRuntime runtime, StackData stackdat)
         {
-            if (_sframe.ParameterCount == 1) {
-                _sframe.SetAll(_sframe.GetParameter(0), "1");
+            if (stackdat.ParameterCount == 1) {
+                stackdat.Add(1);
             }
-            _sframe.AssertParamCount(2);
-            VolumeDown(_sframe.GetParameter<int>(1));
+            stackdat.AssertCount(2);
+            VolumeDown(stackdat.Get<int>(1));
+            return null;
         }
 
         /// <summary>
@@ -240,10 +230,11 @@ namespace Tbasic.Libraries
             User32.keybd_event((byte)Forms.Keys.VolumeMute, 0, 0, 0);
         }
 
-        private void VolumeMute(TFunctionData _sframe)
+        private object VolumeMute(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
+            stackdat.AssertCount(1);
             VolumeMute();
+            return null;
         }
     }
 }

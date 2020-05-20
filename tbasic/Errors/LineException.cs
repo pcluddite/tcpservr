@@ -1,22 +1,8 @@
-﻿/**
- *  TBASIC
- *  Copyright (C) 2013-2016 Timothy Baxendale
- *  
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *  
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *  
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *  USA
- **/
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using System;
 using System.Text;
 
@@ -25,12 +11,12 @@ namespace Tbasic.Errors
     /// <summary>
     /// Represents a parsing exception that occoured on a specific line
     /// </summary>
-    public class LineException : ScriptParsingException
+    public class LineException : TbasicRuntimeException
     {
         /// <summary>
         /// The line at which the error occoured
         /// </summary>
-        public uint Line { get; private set; }
+        public int Line { get; private set; }
         /// <summary>
         /// The function or command that caused the error
         /// </summary>
@@ -46,7 +32,7 @@ namespace Tbasic.Errors
         /// <param name="line">the line number at which the error occoured</param>
         /// <param name="name">the function or command that caused the error</param>
         /// <param name="innerException">the exception that occoured</param>
-        public LineException(uint line, string name, Exception innerException)
+        public LineException(int line, string name, Exception innerException)
             : base(string.Format("An error occoured at '{0}' on line {1}\n", name, line) + GetMessage(innerException), innerException)
         {
             Line = line;
@@ -60,12 +46,14 @@ namespace Tbasic.Errors
             StringBuilder msg = new StringBuilder();
 
             LineException current = ex as LineException;
+            string details = ex.Message;
             while (current != null) { // traverse the exception until we find the actual error
+                details = current.DetailMessage;
                 msg.AppendFormat("\tat '{0}' on line {1}\n", current.Name, current.Line);
-                current = (ex = current.InnerException) as LineException;
+                current = current.InnerException as LineException;
             }
             msg.Append("\nDetail:\n");
-            msg.AppendFormat("{0}", ex.Message);
+            msg.AppendFormat("{0}", details);
             return msg.ToString();
         }
     }

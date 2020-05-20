@@ -1,0 +1,82 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".Generated.cs" #>
+// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
+
+namespace Tbasic.Components
+{
+<#
+for(int i = 1; i <= 7; ++i) {
+    BuildTupleStruct(i);
+    WriteLine("");
+}
+#>
+}
+<#+
+
+private void BuildTupleStruct(int argCount)
+{
+#>
+    /// <summary>
+    /// A tuple that is a value type and holds <#= argCount #> object<#= argCount == 1 ? "" : "s" #>
+    /// </summary>
+<#+ for (int i = 1; i <= argCount; ++i) { #>
+    /// <typeparam name="T<#= i #>">the type for Item<#= i #></typeparam>
+<#+ } #>
+    internal struct ValueTuple<<#+ ExpandTypeParams(argCount); #>>
+    {
+<#+ ExpandProperties(argCount); #>
+
+        public ValueTuple(<#+ ExpandParams(argCount); #>)
+        {
+<#+ ExpandInitializers(argCount); #>
+        }
+    }
+<#+
+}
+
+private void ExpandTypeParams(int argCount)
+{
+    string[] args = new string[argCount];
+    for(int i = 0; i < argCount; ++i) {
+        args[i] = $"T{i + 1}";
+    }
+    Write(string.Join(", ", args));
+}
+
+private void ExpandProperties(int argCount)
+{
+    string[] args = new string[argCount];
+    for(int i = 0; i < argCount; ++i) {
+        args[i] = $"        public T{i + 1} Item{i + 1} {{ get; }}";
+    }
+    Write(string.Join("\r\n", args));
+    WriteLine("");
+}
+
+private void ExpandParams(int argCount)
+{
+    string[] args = new string[argCount];
+    for(int i = 0; i < argCount; ++i) {
+        args[i] = $"T{i + 1} item{i + 1}";
+    }
+    Write(string.Join(", ", args));
+}
+
+private void ExpandInitializers(int argCount)
+{
+    string[] args = new string[argCount];
+    for(int i = 0; i < argCount; ++i) {
+        args[i] = $"			Item{i + 1} = item{i + 1};";
+    }
+    Write(string.Join("\r\n", args));
+    WriteLine("");
+}
+#>

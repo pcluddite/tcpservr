@@ -1,4 +1,9 @@
-﻿using System;
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,7 +35,7 @@ namespace Tbasic.Components
             return new StructReference<T>(value);
         }
 
-        public static implicit operator T(StructReference<T> reference)
+        public static explicit operator T(StructReference<T> reference)
         {
             return reference.innerStruct;
         }

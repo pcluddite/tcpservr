@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0E00B454-68C8-4144-B1A5-8120B2740466}</ProjectGuid>
+    <ProjectGuid>{86EC7054-1D77-4DEE-854F-AD7377FC27AA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tbasic</RootNamespace>
@@ -12,17 +12,61 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\tbasic.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>False</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>True</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>True</CodeContractsRedundantAssumptions>
+    <CodeContractsAssertsToContractsCheckBox>True</CodeContractsAssertsToContractsCheckBox>
+    <CodeContractsRedundantTests>True</CodeContractsRedundantTests>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsMissingPublicEnsuresAsWarnings>False</CodeContractsMissingPublicEnsuresAsWarnings>
+    <CodeContractsInferRequires>True</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferEnsuresAutoProperties>True</CodeContractsInferEnsuresAutoProperties>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestAssumptionsForCallees>False</CodeContractsSuggestAssumptionsForCallees>
+    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
+    <CodeContractsNecessaryEnsures>True</CodeContractsNecessaryEnsures>
+    <CodeContractsSuggestObjectInvariants>True</CodeContractsSuggestObjectInvariants>
+    <CodeContractsSuggestReadonly>True</CodeContractsSuggestReadonly>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsSkipAnalysisIfCannotConnectToCache>False</CodeContractsSkipAnalysisIfCannotConnectToCache>
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
+    <CodeContractsRuntimeCheckingLevel>Pre and Post</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>%28none%29</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +75,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -39,40 +84,93 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Speech" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\Extensions.cs" />
-    <Compile Include="Components\StringSegment.cs" />
+    <Compile Include="Components\ValueTuple.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ValueTuple.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Components\WinRegistry.cs" />
+    <Compile Include="Components\ScreenCapture.cs" />
     <Compile Include="Components\StructReference.cs" />
     <Compile Include="Components\Win32\GDI32.cs" />
     <Compile Include="Components\Win32\Impersonate.cs" />
+    <Compile Include="Errors\DuplicateDefinitionException.cs" />
     <Compile Include="Errors\ErrorCodes.cs" />
+    <Compile Include="Errors\InvalidDefinitionException.cs" />
     <Compile Include="Errors\ScriptParsingException.cs" />
-    <Compile Include="Errors\TbasicException.cs" />
+    <Compile Include="Errors\FunctionException.cs" />
+    <Compile Include="Errors\TbasicRuntimeException.cs" />
     <Compile Include="Errors\ThrowHelper.cs" />
+    <Compile Include="Errors\UndefinedObjectException.cs" />
     <Compile Include="Libraries\ArrayLibrary.cs" />
+    <Compile Include="Libraries\Library.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Library.tt</DependentUpon>
+    </Compile>
     <Compile Include="Libraries\StringLibrary.cs" />
     <Compile Include="Libraries\SystemLibrary.cs" />
-    <Compile Include="Operators\BinaryOperator.cs" />
-    <Compile Include="Operators\BinOpDicationary.cs" />
-    <Compile Include="Operators\BinOpDictionary.IDictionary.cs" />
-    <Compile Include="Operators\BinOpNodePair.cs" />
-    <Compile Include="Operators\IOperator.cs" />
-    <Compile Include="Operators\UnaryOpDictionary.cs" />
-    <Compile Include="Operators\UnaryOpDictionary.IDictionary.cs" />
-    <Compile Include="Operators\UnaryOperator.cs" />
-    <Compile Include="Runtime\Parsing\GroupParser.cs" />
-    <Compile Include="Runtime\Evaluator\Evaluator.cs" />
+    <Compile Include="Parsing\GroupParser.cs" />
+    <Compile Include="Parsing\Preprocessors\TerminalPreprocessor.cs" />
+    <Compile Include="Parsing\Scanners\CScanner\CScanner.cs" />
+    <Compile Include="Parsing\Scanners\DefaultScanner\DefaultScanner.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultScanner.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Parsing\Preprocessors\IPreprocessor.cs" />
+    <Compile Include="Parsing\Scanners\DefaultScanner\MatchFast.cs" />
+    <Compile Include="Parsing\Scanners\IScanner.cs" />
+    <Compile Include="Parsing\Preprocessors\Preprocessors.cs" />
+    <Compile Include="Parsing\Scanners\Scanners.cs" />
+    <Compile Include="Parsing\Scanners\TerminalScanner\TerminalScanner.cs" />
+    <Compile Include="Parsing\StringSegment.cs" />
+    <Compile Include="Types\Function\FuncCache.cs" />
+    <Compile Include="Runtime\ObjectContext.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ObjectContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Runtime\StackData.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StackData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Types\ITbasicObject.cs" />
+    <Compile Include="Types\Number.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Number.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Types\Operators\BinaryOperator.cs" />
+    <Compile Include="Libraries\BinOpDicationary.cs" />
+    <Compile Include="Types\Operators\GroupOperator.cs" />
+    <Compile Include="Types\Operators\IOperator.cs" />
+    <Compile Include="Libraries\OperatorDictionary.cs" />
+    <Compile Include="Libraries\UnaryOpDictionary.cs" />
+    <Compile Include="Types\Operators\UnaryOperator.cs" />
+    <Compile Include="Runtime\ExecuterOption.cs" />
+    <Compile Include="Types\Time.cs" />
+    <Compile Include="Types\TypeConvert.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TypeConvert.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Parsing\Statement.cs" />
+    <Compile Include="Parsing\Scanners\DefaultScanner\DefaultScanner.GroupParser.cs" />
+    <Compile Include="Runtime\Evaluator\ExpressionEvaluator.cs" />
     <Compile Include="Runtime\Evaluator\BinaryOpQueue.cs" />
-    <Compile Include="Runtime\Evaluator\Function.cs" />
-    <Compile Include="Runtime\Evaluator\IEvaluator.cs" />
-    <Compile Include="Runtime\Parsing\LineCollection.cs" />
-    <Compile Include="Runtime\Parsing\Scanner.cs" />
-    <Compile Include="Runtime\StackFrame\ObjectContext.cs" />
-    <Compile Include="Runtime\Evaluator\Variable.cs" />
-    <Compile Include="Runtime\Executer.cs" />
+    <Compile Include="Runtime\Evaluator\FunctionEvaluator.cs" />
+    <Compile Include="Runtime\Evaluator\IExpressionEvaluator.cs" />
+    <Compile Include="Parsing\LineCollection.cs" />
+    <Compile Include="Parsing\Scanners\DefaultScanner\DefaultScanner.cs" />
+    <Compile Include="Parsing\Preprocessors\DefaultPreprocessor.cs" />
+    <Compile Include="Runtime\ObjectContext.cs" />
+    <Compile Include="Runtime\Evaluator\VariableEvaluator.cs" />
+    <Compile Include="Runtime\TRuntime.cs" />
     <Compile Include="Libraries\AutoLibrary.cs" />
     <Compile Include="Libraries\FileIOLibrary.cs" />
     <Compile Include="Libraries\ProcessLibrary.cs" />
@@ -83,21 +181,18 @@
     <Compile Include="Components\Win32\Win32Window.cs" />
     <Compile Include="Libraries\MathLibrary.cs" />
     <Compile Include="Libraries\RuntimeLibrary.cs" />
-    <Compile Include="Blocks\DoBlock.cs" />
-    <Compile Include="Blocks\ForBlock.cs" />
-    <Compile Include="Blocks\FuncBlock.cs" />
-    <Compile Include="Blocks\SelectBlock.cs" />
-    <Compile Include="Blocks\WhileBlock.cs" />
-    <Compile Include="Blocks\IfBlock.cs" />
-    <Compile Include="Blocks\CodeBlock.cs" />
-    <Compile Include="Runtime\Parsing\Line.cs" />
+    <Compile Include="Types\Blocks\DoBlock.cs" />
+    <Compile Include="Types\Blocks\ForBlock.cs" />
+    <Compile Include="Types\Blocks\FunctionBlock.cs" />
+    <Compile Include="Types\Blocks\WhileBlock.cs" />
+    <Compile Include="Types\Blocks\IfBlock.cs" />
+    <Compile Include="Types\Blocks\CodeBlock.cs" />
+    <Compile Include="Parsing\Line.cs" />
     <Compile Include="Components\ImageCompression.cs" />
-    <Compile Include="Components\RegistryUtilities.cs" />
-    <Compile Include="Components\ScreenCapture.cs" />
     <Compile Include="Components\Win32\UnmanagedTypes.cs" />
     <Compile Include="Components\Win32\User32.cs" />
     <Compile Include="Components\Win32\WindowEnums.cs" />
-    <Compile Include="Runtime\StackFrame\TFunctionData.cs" />
+    <Compile Include="Runtime\StackData.cs" />
     <Compile Include="Components\Win32\Windows.cs" />
     <Compile Include="Libraries\WindowLibrary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,7 +202,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Errors\LineException.cs" />
-    <Compile Include="Runtime\Types\Number.cs" />
+    <Compile Include="Types\Function\CallData.cs" />
+    <Compile Include="Types\Number.cs" />
+    <Compile Include="Types\TClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -117,6 +214,39 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\blank.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Components\ValueTuple.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ValueTuple.Generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Libraries\Library.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Library.Generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Parsing\Scanners\DefaultScanner\DefaultScanner.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DefaultScanner.Generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Runtime\ObjectContext.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ObjectContext.Generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Runtime\StackData.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StackData.Generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Types\Number.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Number.Generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Types\TypeConvert.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TypeConvert.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

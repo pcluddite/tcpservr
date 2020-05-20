@@ -1,22 +1,8 @@
-﻿/**
- *  TBASIC
- *  Copyright (C) 2013-2016 Timothy Baxendale
- *  
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *  
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *  
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *  USA
- **/
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using Microsoft.VisualBasic;
 using System;
 using System.Speech.Synthesis;
@@ -24,6 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Tbasic.Errors;
 using Tbasic.Runtime;
+using Tbasic.Types;
 
 namespace Tbasic.Libraries
 {
@@ -49,40 +36,42 @@ namespace Tbasic.Libraries
             Add("StdPause", ConsolePause);
         }
 
-        private void ConsoleWriteline(TFunctionData _sframe)
+        private object ConsoleWriteline(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            Console.WriteLine(_sframe.GetParameter(1));
+            stackdat.AssertCount(2);
+            Console.WriteLine(stackdat.Get(1));
+            return null;
         }
 
-        private void ConsoleWrite(TFunctionData _sframe)
+        private object ConsoleWrite(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            Console.Write(_sframe.GetParameter(1));
+            stackdat.AssertCount(2);
+            Console.Write(stackdat.Get(1));
+            return null;
         }
 
-        private void ConsoleRead(TFunctionData _sframe)
+        private object ConsoleRead(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
-            _sframe.Data = Console.Read();
+            stackdat.AssertCount(1);
+            return Console.Read();
         }
 
-        private void ConsoleReadLine(TFunctionData _sframe)
+        private object ConsoleReadLine(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
-            _sframe.Data = Console.ReadLine();
+            stackdat.AssertCount(1);
+            return Console.ReadLine();
         }
 
-        private void ConsoleReadKey(TFunctionData _sframe)
+        private object ConsoleReadKey(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
-            _sframe.Data = Console.ReadKey().KeyChar;
+            stackdat.AssertCount(1);
+            return Console.ReadKey().KeyChar;
         }
 
-        private void ConsolePause(TFunctionData _sframe)
+        private object ConsolePause(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
-            _sframe.Data = Console.ReadKey(true).KeyChar;
+            stackdat.AssertCount(1);
+            return Console.ReadKey(true).KeyChar;
         }
 
         /// <summary>
@@ -99,36 +88,30 @@ namespace Tbasic.Libraries
             return Interaction.InputBox(prompt, title, defaultResponse, x, y);
         }
 
-        private void Input(TFunctionData _sframe)
+        private object Input(TRuntime runtime, StackData stackdat)
         {
-            if (_sframe.ParameterCount == 2) {
-                _sframe.SetAll(
-                    _sframe.GetParameter(0), _sframe.GetParameter(1),
-                    "Input", -1, -1
-                    );
+            if (stackdat.ParameterCount == 2) {
+                stackdat.AddRange("Tbasic", -1, -1);
             }
-            if (_sframe.ParameterCount == 3) {
-                _sframe.SetAll(
-                    _sframe.GetParameter(0), _sframe.GetParameter(1),
-                    _sframe.GetParameter(2), -1, -1);
+            if (stackdat.ParameterCount == 3) {
+                stackdat.AddRange(-1, -1);
             }
-            if (_sframe.ParameterCount == 4) {
-                _sframe.SetAll(
-                    _sframe.GetParameter(0), _sframe.GetParameter(1),
-                    _sframe.GetParameter(2), _sframe.GetParameter(3), -1);
+            if (stackdat.ParameterCount == 4) {
+                stackdat.AddRange(-1);
             }
-            _sframe.AssertParamCount(5);
+            stackdat.AssertCount(5);
 
-            int x = _sframe.GetParameter<int>(3),
-                y = _sframe.GetParameter<int>(4);
+            int x = stackdat.Get<int>(3),
+                y = stackdat.Get<int>(4);
 
-            string resp = InputBox(_sframe.GetParameter<string>(1), _sframe.GetParameter<string>(2), "", x, y);
+            string resp = InputBox(stackdat.Get<string>(1), stackdat.Get<string>(2), "", x, y);
 
             if (string.IsNullOrEmpty(resp)) { 
-                _sframe.Status = ErrorSuccess.NoContent; // -1 no input 2/24
+                stackdat.Status = ErrorSuccess.NoContent; // -1 no input 2/24
+                return null;
             }
             else {
-                _sframe.Data = resp;
+                return resp;
             }
         }
 
@@ -145,22 +128,23 @@ namespace Tbasic.Libraries
             t.Start(new object[] { timeout, icon, text, title });
         }
 
-        private void TrayTip(TFunctionData _sframe)
+        private object TrayTip(TRuntime runtime, StackData stackdat)
         {
-            if (_sframe.ParameterCount == 2) {
-                _sframe.AddParameter(""); // title
-                _sframe.AddParameter(0); // icon
-                _sframe.AddParameter(5000); // timeout
+            if (stackdat.ParameterCount == 2) {
+                stackdat.Add(""); // title
+                stackdat.Add(0); // icon
+                stackdat.Add(5000); // timeout
             }
-            else if (_sframe.ParameterCount == 3) {
-                _sframe.AddParameter(0); // icon
-                _sframe.AddParameter(5000); // timeout
+            else if (stackdat.ParameterCount == 3) {
+                stackdat.Add(0); // icon
+                stackdat.Add(5000); // timeout
             }
-            else if (_sframe.ParameterCount == 4) {
-                _sframe.AddParameter(5000); // timeout
+            else if (stackdat.ParameterCount == 4) {
+                stackdat.Add(5000); // timeout
             }
-            _sframe.AssertParamCount(5);
-            TrayTip(text: _sframe.GetParameter<string>(1), title: _sframe.GetParameter<string>(2), icon: _sframe.GetParameter<ToolTipIcon>(3), timeout: _sframe.GetParameter<int>(4));
+            stackdat.AssertCount(5);
+            TrayTip(text: stackdat.Get<string>(1), title: stackdat.Get<string>(2), icon: stackdat.Get<ToolTipIcon>(3), timeout: stackdat.Get<int>(4));
+            return null;
         }
 
         private static void MakeTrayTip(object param)
@@ -199,18 +183,18 @@ namespace Tbasic.Libraries
             return Interaction.MsgBox(prompt, (MsgBoxStyle)buttons, title).ToString();
         }
 
-        private void MsgBox(TFunctionData _sframe)
+        private object MsgBox(TRuntime runtime, StackData stackdat)
         {
-            if (_sframe.ParameterCount == 3) {
-                _sframe.AddParameter("");
+            if (stackdat.ParameterCount == 3) {
+                stackdat.Add("");
             }
-            _sframe.AssertParamCount(4);
+            stackdat.AssertCount(4);
 
-            int flag = _sframe.GetParameter<int>(1);
-            string text = _sframe.GetParameter<string>(2),
-                   title = _sframe.GetParameter<string>(3);
+            int flag = stackdat.Get<int>(1);
+            string text = stackdat.Get<string>(2),
+                   title = stackdat.Get<string>(3);
 
-            _sframe.Data = MsgBox(buttons: flag, prompt: text, title: title);
+            return MsgBox(buttons: flag, prompt: text, title: title);
         }
 
         /// <summary>
@@ -223,10 +207,11 @@ namespace Tbasic.Libraries
             t.Start(text);
         }
 
-        private void Say(TFunctionData _sframe)
+        private object Say(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            Say(_sframe.GetParameter<string>(1));
+            stackdat.AssertCount(2);
+            Say(stackdat.Get<string>(1));
+            return null;
         }
 
         private static void Say(object text)

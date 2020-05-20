@@ -1,43 +1,23 @@
-﻿/**
- *  TBASIC
- *  Copyright (C) 2013-2016 Timothy Baxendale
- *  
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *  
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *  
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *  USA
- **/
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using System;
-using System.Collections.Generic;
 using System.Collections;
-using Tbasic.Runtime;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using Tbasic.Types;
 
 namespace Tbasic.Libraries
 {
     /// <summary>
-    /// Delegate for processing a TBasic function
+    /// A library for storing and processing Tbasic functions
     /// </summary>
-    /// <param name="stack">The StackFrame containing parameter and execution information</param>
-    public delegate void TBasicFunction(TFunctionData stack);
-
-    /// <summary>
-    /// A library for storing and processing TBasic functions
-    /// </summary>
-    public class Library : IDictionary<string, TBasicFunction>
+    public partial class Library : IDictionary<string, CallData>
     {
-
-        private Dictionary<string, TBasicFunction> lib = new Dictionary<string, TBasicFunction>(StringComparer.CurrentCultureIgnoreCase);
-
+        private Dictionary<string, CallData> lib = new Dictionary<string, CallData>(StringComparer.OrdinalIgnoreCase);
+        
         /// <summary>
         /// Initializes a new Tbasic Library object
         /// </summary>
@@ -46,11 +26,27 @@ namespace Tbasic.Libraries
         }
 
         /// <summary>
+        /// Initializes a new Tbasic Library object incorporating the functions from another library
+        /// </summary>
+        public Library(Library other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+            Contract.EndContractBlock();
+
+            lib = new Dictionary<string, CallData>(other.lib);
+        }
+
+        /// <summary>
         /// Initializes a new Tbasic Library object
         /// </summary>
         /// <param name="libs">a collection of Library objects that should be incorporated into this one</param>
-        public Library(ICollection<Library> libs)
+        public Library(IEnumerable<Library> libs)
         {
+            if (libs == null)
+                throw new ArgumentNullException(nameof(libs));
+            Contract.EndContractBlock();
+
             foreach (Library lib in libs) 
                 AddLibrary(lib);
         }
@@ -58,98 +54,214 @@ namespace Tbasic.Libraries
         /// <summary>
         /// Adds a Tbasic Library to this one
         /// </summary>
-        /// <param name="lib">the Tbasic Library</param>
-        public void AddLibrary(Library lib)
+        /// <param name="other">the Tbasic Library</param>
+        public void AddLibrary(Library other)
         {
-            foreach (var kv_entry in lib)
-                Add(kv_entry.Key, kv_entry.Value);
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+            Contract.EndContractBlock();
+
+            foreach (var kv_entry in other.lib)
+                lib.Add(kv_entry.Key, kv_entry.Value);
         }
 
-        public void Add(string key, TBasicFunction value)
+        /// <summary>
+        /// Adds a function to this dictionary
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void Add(string key, TbasicFunction value)
         {
+            if (key == null)
+                throw new ArgumentNullException(nameof(key));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            Contract.EndContractBlock();
+
+            lib.Add(key, new CallData(value, evaluate: true));
+        }
+
+        /// <summary>
+        /// Adds a function to this dictionary
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="evaluate">whether or not this function should have its parameters evaluated</param>
+        public void Add(string key, TbasicFunction value, bool evaluate)
+        {
+            if (key == null)
+                throw new ArgumentNullException(nameof(key));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            Contract.EndContractBlock();
+
+            lib.Add(key, new CallData(value, evaluate));
+        }
+
+        /// <summary>
+        /// Adds a function to this dictionary
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void Add(string key, CallData value)
+        {
+            if (key == null)
+                throw new ArgumentNullException(nameof(key));
+            Contract.EndContractBlock();
+
             lib.Add(key, value);
         }
 
+        /// <summary>
+        /// Adds any delegate you might get your hands on
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="evaluate">whether or not this function should have its parameters evaluated</param>
+        /// <param name="requiredArgs">the required number of arguments</param>
+        public void AddDelegate(string key, Delegate value, bool evaluate = true, int requiredArgs = -1)
+        {
+            if (key == null)
+                throw new ArgumentNullException(nameof(key));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            Contract.EndContractBlock();
+
+            TbasicFunction func = value as TbasicFunction;
+            if (func != null)
+                Add(key, func);
+            if (value.Method.ReturnType == typeof(void))
+                lib.Add(key, new CallData(value, requiredArgs < 0 ? CountParameters(value) : requiredArgs, evaluate));
+        }
+
+        private static int CountParameters(Delegate d)
+        {
+            Contract.Ensures(Contract.Result<int>() >= 0);
+            return d.Method.GetParameters().Length;
+        }
+
+        /// <summary>
+        /// Determines if a key exists in this dictionary
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool ContainsKey(string key)
         {
             return lib.ContainsKey(key);
         }
 
+        /// <summary>
+        /// Gets a collection of this dictionary's keys
+        /// </summary>
         public ICollection<string> Keys
         {
             get { return lib.Keys; }
         }
 
+        /// <summary>
+        /// Removes a key and its associated value from the dictionary
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool Remove(string key)
         {
             return lib.Remove(key);
         }
 
-        public bool TryGetValue(string key, out TBasicFunction value)
+        /// <summary>
+        /// Tries to get a value from this dictionary.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool TryGetValue(string key, out CallData value)
         {
             return lib.TryGetValue(key, out value);
         }
 
-        public ICollection<TBasicFunction> Values
+        /// <summary>
+        /// Gets a collection of this dictionary's values
+        /// </summary>
+        public ICollection<CallData> Values
         {
             get { return lib.Values; }
         }
 
-        public TBasicFunction this[string key]
+        /// <summary>
+        /// Gets or sets a function at a given key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public CallData this[string key]
         {
-            get
-            {
+            get {
                 return lib[key];
             }
-            set
-            {
+            set {
                 lib[key] = value;
             }
         }
 
-        void ICollection<KeyValuePair<string, TBasicFunction>>.Add(KeyValuePair<string, TBasicFunction> item)
-        {
-            ((ICollection<KeyValuePair<string, TBasicFunction>>)lib).Add(item);
-        }
-
+        /// <summary>
+        /// Clears all items from this dictionary
+        /// </summary>
         public void Clear()
         {
             lib.Clear();
         }
 
-        bool ICollection<KeyValuePair<string, TBasicFunction>>.Contains(KeyValuePair<string, TBasicFunction> item)
+        /// <summary>
+        /// Gets the enumerator
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<KeyValuePair<string, CallData>> GetEnumerator()
         {
-            return ((ICollection<KeyValuePair<string, TBasicFunction>>)lib).Contains(item);
+            return ((IDictionary<string, CallData>)lib).GetEnumerator();
         }
 
-        void ICollection<KeyValuePair<string, TBasicFunction>>.CopyTo(KeyValuePair<string, TBasicFunction>[] array, int arrayIndex)
-        {
-            ((ICollection<KeyValuePair<string, TBasicFunction>>)lib).CopyTo(array, arrayIndex);
-        }
-
+        /// <summary>
+        /// Returns the number of elements in this collection
+        /// </summary>
         public int Count
         {
             get { return lib.Count; }
         }
-
-        bool ICollection<KeyValuePair<string, TBasicFunction>>.IsReadOnly
+        
+        bool IDictionary<string, CallData>.TryGetValue(string key, out CallData value)
         {
-            get { return ((ICollection<KeyValuePair<string, TBasicFunction>>)lib).IsReadOnly; }
-        }
-
-        bool ICollection<KeyValuePair<string, TBasicFunction>>.Remove(KeyValuePair<string, TBasicFunction> item)
-        {
-            return ((ICollection<KeyValuePair<string, TBasicFunction>>)lib).Remove(item);
-        }
-
-        public IEnumerator<KeyValuePair<string, TBasicFunction>> GetEnumerator()
-        {
-            return ((ICollection<KeyValuePair<string, TBasicFunction>>)lib).GetEnumerator();
+            return ((IDictionary<string, CallData>)lib).TryGetValue(key, out value);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return ((IDictionary<string, CallData>)lib).GetEnumerator();
+        }
+
+        bool ICollection<KeyValuePair<string, CallData>>.IsReadOnly
+        {
+            get {
+                return ((IDictionary<string, CallData>)lib).IsReadOnly;
+            }
+        }
+
+        void ICollection<KeyValuePair<string, CallData>>.CopyTo(KeyValuePair<string, CallData>[] array, int arrayIndex)
+        {
+            ((IDictionary<string, CallData>)lib).CopyTo(array, arrayIndex);
+        }
+
+        bool ICollection<KeyValuePair<string, CallData>>.Remove(KeyValuePair<string, CallData> item)
+        {
+            return ((IDictionary<string, CallData>)lib).Remove(item);
+        }
+
+        void ICollection<KeyValuePair<string, CallData>>.Add(KeyValuePair<string, CallData> item)
+        {
+            ((IDictionary<string, CallData>)lib).Add(item);
+        }
+
+        bool ICollection<KeyValuePair<string, CallData>>.Contains(KeyValuePair<string, CallData> item)
+        {
+            return ((IDictionary<string, CallData>)lib).Contains(item);
         }
     }
 }

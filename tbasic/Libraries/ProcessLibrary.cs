@@ -1,45 +1,30 @@
-﻿/**
- *  TBASIC
- *  Copyright (C) 2013-2016 Timothy Baxendale
- *  
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *  
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *  
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *  USA
- **/
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Tbasic.Runtime;
-using Tbasic.Errors;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using Tbasic.Errors;
+using Tbasic.Runtime;
+using Tbasic.Types;
 
 namespace Tbasic.Libraries
 {
     internal class ProcessLibrary : Library
     {
-
         public ProcessLibrary()
         {
             Add("ProcStart", Run);
             Add("ProcClose", ProcessClose);
             Add("ProcKill", ProcessKill);
             Add("ProcExists", ProcessExists);
-            Add("ProcBlockList", BlockedList);
+            Add("ProcBlockList", new TbasicFunction(BlockedList));
             //Add("ProcBlock", ProcessBlock);
             //Add("ProcRedirect", ProcessRedirect);
             Add("ProcSetDebugger", ProcessSetDebugger);
@@ -47,64 +32,67 @@ namespace Tbasic.Libraries
             Add("ProcList", ProcessList);
         }
 
-        private void ProcessExists(TFunctionData _sframe)
+        private object ProcessExists(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            _sframe.Data = false;
+            stackdat.AssertCount(2);
             foreach (Process p in Process.GetProcesses()) {
-                if (p.ProcessName.EqualsIgnoreCase(_sframe.GetParameter<string>(1))) {
-                    _sframe.Data = true;
-                    break;
+                if (p.ProcessName.EqualsIgnoreCase(stackdat.Get<string>(1))) {
+                    return true;
                 }
             }
+            return false;
         }
 
-        private void ProcessList(TFunctionData _sframe)
+        private object ProcessList(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
+            stackdat.AssertCount(1);
             Process[] procs = Process.GetProcesses();
             if (procs.Length > 0) {
                 object[][] _ret = new object[procs.Length][];
                 for (int index = 0; index < _ret.Length; index++) {
                     _ret[index] = new object[] { procs[index].Id, procs[index].ProcessName };
                 }
-                _sframe.Data = _ret;
+                return _ret;
             }
             else {
-                _sframe.Status = ErrorSuccess.NoContent;
+                stackdat.Status = ErrorSuccess.NoContent;
+                return null;
             }
         }
 
-        private void ProcessKill(TFunctionData _sframe)
+        private object ProcessKill(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
+            stackdat.AssertCount(2);
             foreach (Process p in Process.GetProcesses()) {
-                if (p.ProcessName.EqualsIgnoreCase(_sframe.GetParameter<string>(1))) {
+                if (p.ProcessName.EqualsIgnoreCase(stackdat.Get<string>(1))) {
                     p.Kill();
-                    return;
+                    return null;
                 }
             }
-            _sframe.Status = ErrorClient.NotFound;
+            stackdat.Status = ErrorClient.NotFound;
+            return null;
         }
 
-        private void ProcessClose(TFunctionData _sframe)
+        private object ProcessClose(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
+            stackdat.AssertCount(2);
             foreach (Process p in Process.GetProcesses()) {
-                if (p.ProcessName.EqualsIgnoreCase(_sframe.GetParameter<string>(1))) {
+                if (p.ProcessName.EqualsIgnoreCase(stackdat.Get<string>(1))) {
                     p.Close();
-                    return;
+                    return null;
                 }
             }
-            _sframe.Status = ErrorClient.NotFound;
+            stackdat.Status = ErrorClient.NotFound;
+            return null;
         }
 
-        private void BlockedList(TFunctionData _sframe)
+        private object BlockedList(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
+            stackdat.AssertCount(1);
             var list = BlockedList(); // dicts currently are not supported 2/24/15
             if (list.Count == 0) {
-                _sframe.Status = ErrorSuccess.NoContent;
+                stackdat.Status = ErrorSuccess.NoContent;
+                return null;
             }
             else {
                 string[][] _array = new string[list.Count][];
@@ -112,7 +100,7 @@ namespace Tbasic.Libraries
                 foreach (var _kv in list) {
                     _array[index++] = new string[] { _kv.Key, _kv.Value }; // convert it to jagged array (like AutoIt) 2/23/15
                 }
-                _sframe.Data = _array;
+                return _array;
             }
         }
 
@@ -133,60 +121,63 @@ namespace Tbasic.Libraries
 
         private const string REG_EXEC_PATH = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
 
-        private void ProcessBlock(TFunctionData _sframe)
+        private object ProcessBlock(TRuntime runtime, StackData stackdat)
         {
-            if (_sframe.ParameterCount == 2) {
-                _sframe.AddParameter(16);
-                _sframe.AddParameter("The application you requested has been blocked");
-                _sframe.AddParameter("Blocked");
+            if (stackdat.ParameterCount == 2) {
+                stackdat.Add(16);
+                stackdat.Add("The application you requested has been blocked");
+                stackdat.Add("Blocked");
             }
-            _sframe.AssertParamCount(5);
-            string name = _sframe.GetParameter<string>(1);
+            stackdat.AssertCount(5);
+            string name = stackdat.Get<string>(1);
             if (!Path.HasExtension(name)) {
                 name += ".exe";
             }
             name = Path.GetFileName(name);
             using (RegistryKey key = Registry.LocalMachine.CreateSubKey(Path.Combine(REG_EXEC_PATH, name))) {
-                key.SetValue("Debugger", "\"" + Application.ExecutablePath + "\" -m \"" + _sframe.GetParameter(2) + "\" \"" + _sframe.GetParameter(3) + "\" \"" + _sframe.GetParameter(4) + "\"");
+                key.SetValue("Debugger", "\"" + Application.ExecutablePath + "\" -m \"" + stackdat.Get(2) + "\" \"" + stackdat.Get(3) + "\" \"" + stackdat.Get(4) + "\"");
             }
+            return null;
         }
 
-        private void ProcessRedirect(TFunctionData _sframe)
+        private object ProcessRedirect(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(3);
-            string name = _sframe.GetParameter<string>(1);
+            stackdat.AssertCount(3);
+            string name = stackdat.Get<string>(1);
             if (!Path.HasExtension(name)) {
                 name += ".exe";
             }
             name = Path.GetFileName(name);
-            if (!File.Exists(_sframe.GetParameter<string>(2))) {
+            if (!File.Exists(stackdat.Get<string>(2))) {
                 throw new FileNotFoundException();
             }
             using (RegistryKey key = Registry.LocalMachine.CreateSubKey(Path.Combine(REG_EXEC_PATH, name))) {
-                key.SetValue("Debugger", "\"" + Application.ExecutablePath + "\" -r \"" + _sframe.GetParameter(2) + "\"");
+                key.SetValue("Debugger", "\"" + Application.ExecutablePath + "\" -r \"" + stackdat.Get(2) + "\"");
             }
+            return null;
         }
 
-        private void ProcessSetDebugger(TFunctionData _sframe)
+        private object ProcessSetDebugger(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(3);
-            string name = _sframe.GetParameter<string>(1);
+            stackdat.AssertCount(3);
+            string name = stackdat.Get<string>(1);
             if (!Path.HasExtension(name)) {
                 name += ".exe";
             }
             name = Path.GetFileName(name);
-            if (!File.Exists(_sframe.GetParameter<string>(2))) {
+            if (!File.Exists(stackdat.Get<string>(2))) {
                 throw new FileNotFoundException();
             }
             using (RegistryKey key = Registry.LocalMachine.CreateSubKey(Path.Combine(REG_EXEC_PATH, name))) {
-                key.SetValue("Debugger", _sframe.GetParameter<string>(2));
+                key.SetValue("Debugger", stackdat.Get<string>(2));
             }
+            return null;
         }
 
-        private void Unblock(TFunctionData _sframe)
+        private object Unblock(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            string name = _sframe.GetParameter<string>(1);
+            stackdat.AssertCount(2);
+            string name = stackdat.Get<string>(1);
             if (!name.Contains(".")) {
                 name += ".exe";
             }
@@ -197,27 +188,29 @@ namespace Tbasic.Libraries
                 }
             }
             else {
-                _sframe.Status = -1; // -1 not found 2-24-15
+                stackdat.Status = -1; // -1 not found 2-24-15
             }
+            return null;
         }
 
-        private void Run(TFunctionData _sframe)
+        private object Run(TRuntime runtime, StackData stackdat)
         {
-            if (_sframe.ParameterCount == 2) {
-                _sframe.AddParameter("");
+            if (stackdat.ParameterCount == 2) {
+                stackdat.Add("");
             }
-            if (_sframe.ParameterCount == 3) {
-                _sframe.AddParameter(Environment.CurrentDirectory);
+            if (stackdat.ParameterCount == 3) {
+                stackdat.Add(Environment.CurrentDirectory);
             }
-            if (_sframe.ParameterCount == 4) {
-                _sframe.AddParameter(false);
+            if (stackdat.ParameterCount == 4) {
+                stackdat.Add(false);
             }
-            _sframe.AssertParamCount(5);
+            stackdat.AssertCount(5);
             ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = _sframe.GetParameter<string>(1);
-            startInfo.Arguments = _sframe.GetParameter<string>(2);
-            startInfo.WorkingDirectory = _sframe.GetParameter<string>(3);
-            _sframe.Status = Run(startInfo, _sframe.GetParameter<bool>(4));
+            startInfo.FileName = stackdat.Get<string>(1);
+            startInfo.Arguments = stackdat.Get<string>(2);
+            startInfo.WorkingDirectory = stackdat.Get<string>(3);
+            stackdat.Status = Run(startInfo, stackdat.Get<bool>(4));
+            return null;
         }
 
         private int Run(ProcessStartInfo info, bool wait)

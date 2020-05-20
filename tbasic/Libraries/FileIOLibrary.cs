@@ -1,28 +1,14 @@
-﻿/**
- *  TBASIC
- *  Copyright (C) 2013-2016 Timothy Baxendale
- *  
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *  
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *  
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *  USA
- **/
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using Microsoft.VisualBasic.FileIO;
 using System;
 using System.IO;
 using System.Text;
-using Tbasic.Runtime;
 using Tbasic.Errors;
+using Tbasic.Runtime;
 
 namespace Tbasic.Libraries
 {
@@ -31,7 +17,6 @@ namespace Tbasic.Libraries
     /// </summary>
     public class FileIOLibrary : Library
     {
-
         /// <summary>
         /// Initializes a new instance of this class
         /// </summary>
@@ -46,6 +31,8 @@ namespace Tbasic.Libraries
             Add("FileSetCreatedDate", FileSetCreatedDate);
             Add("FileSetModifiedDate", FileSetModifiedDate);
             Add("FileExists", FileExists);
+            Add("GetCurrentDirectory", GetCurrentDirectory);
+            Add("SetCurrentDirectory", new Action<string>(SetCurrentDirectory));
             Add("DirExists", DirExists);
             Add("DirGetDirList", DirGetDirList);
             Add("DirGetFileList", DirGetFileList);
@@ -58,92 +45,115 @@ namespace Tbasic.Libraries
             Add("Shell", Shell);
         }
 
-        private void DirExists(TFunctionData _sframe)
+        private static string GetCurrentDirectory()
         {
-            _sframe.AssertParamCount(2);
-            _sframe.Data = Directory.Exists(_sframe.GetParameter<string>(1));
+            return Directory.GetCurrentDirectory();
         }
 
-        private void FileExists(TFunctionData _sframe)
+        private static void SetCurrentDirectory(string dir)
         {
-            _sframe.AssertParamCount(2);
-            _sframe.Data = File.Exists(_sframe.GetParameter<string>(1));
+            Directory.SetCurrentDirectory(dir);
         }
 
-        private void FileMove(TFunctionData _sframe)
+        private static object DirExists(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(3);
-            File.Move(_sframe.GetParameter<string>(1), _sframe.GetParameter<string>(2));
+            stackdat.AssertCount(2);
+            return Directory.Exists(stackdat.Get<string>(1));
         }
 
-        private void FileCopy(TFunctionData _sframe)
+        private static object FileExists(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(3);
-            File.Copy(_sframe.GetParameter<string>(1), _sframe.GetParameter<string>(2));
+            stackdat.AssertCount(2);
+            return File.Exists(stackdat.Get<string>(1));
         }
 
-        private void FileDelete(TFunctionData _sframe)
+        private static object FileMove(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            File.Delete(_sframe.GetParameter<string>(1));
+            stackdat.AssertCount(3);
+            File.Move(stackdat.Get<string>(1), stackdat.Get<string>(2));
+            return null;
         }
 
-        private void DirDelete(TFunctionData _sframe)
+        private static object FileCopy(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            Directory.Delete(_sframe.GetParameter<string>(1));
+            stackdat.AssertCount(3);
+            File.Copy(stackdat.Get<string>(1), stackdat.Get<string>(2));
+            return null;
         }
 
-        private void DirMove(TFunctionData _sframe)
+        private static object FileDelete(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(3);
-            Directory.Move(_sframe.GetParameter<string>(1), _sframe.GetParameter<string>(2));
+            stackdat.AssertCount(2);
+            File.Delete(stackdat.Get<string>(1));
+            return null;
         }
 
-        private void DirCreate(TFunctionData _sframe)
+        private static object DirDelete(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            Directory.CreateDirectory(_sframe.GetParameter<string>(1));
+            stackdat.AssertCount(2);
+            Directory.Delete(stackdat.Get<string>(1));
+            return null;
         }
 
-        private void DirGetFileList(TFunctionData _sframe)
+        private static object DirMove(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            _sframe.Data = Directory.GetFiles(_sframe.GetParameter<string>(1));
+            stackdat.AssertCount(3);
+            Directory.Move(stackdat.Get<string>(1), stackdat.Get<string>(2));
+            return null;
         }
 
-        private void DirGetDirList(TFunctionData _sframe)
+        private static object DirCreate(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            _sframe.Data = Directory.GetDirectories(_sframe.GetParameter<string>(1));
+            stackdat.AssertCount(2);
+            Directory.CreateDirectory(stackdat.Get<string>(1));
+            return null;
         }
 
-        private void FileReadAll(TFunctionData _sframe)
+        private static object DirGetFileList(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            _sframe.Data = File.ReadAllText(_sframe.GetParameter<string>(1));
+            stackdat.AssertCount(2);
+            return Directory.GetFiles(stackdat.Get<string>(1));
         }
 
-        private void FileWriteAll(TFunctionData _sframe)
+        private static object DirGetDirList(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(3);
-            string path = _sframe.GetParameter<string>(1);
-            object data = _sframe.GetParameter(2);
+            stackdat.AssertCount(2);
+            return Directory.GetDirectories(stackdat.Get<string>(1));
+        }
+
+        private static object FileReadAll(TRuntime runtime, StackData stackdat)
+        {
+            stackdat.AssertCount(2);
+            return File.ReadAllText(stackdat.Get<string>(1));
+        }
+
+        private static object FileWriteAll(TRuntime runtime, StackData stackdat)
+        {
+            stackdat.AssertCount(3);
+            string path = stackdat.Get<string>(1);
+            object data = stackdat.Get(2);
 
             string sData = data as string;
-            if (sData != null)
+            if (sData != null) {
                 File.WriteAllText(path, sData);
+                return null;
+            }
 
             string[] saData = data as string[];
-            if (saData != null)
+            if (saData != null) {
                 File.WriteAllLines(path, saData);
+                return null;
+            }
 
             byte[] bData = data as byte[];
-            if (bData != null)
+            if (bData != null) {
                 File.WriteAllBytes(path, bData);
+                return null;
+            }
 
-            _sframe.Status = ErrorSuccess.Warnings; // data is written, but not necessarily useful
+            stackdat.Status = ErrorSuccess.Warnings; // data is written, but not necessarily useful
             File.WriteAllText(path, data + "");
+            return null;
         }
 
         /// <summary>
@@ -155,31 +165,32 @@ namespace Tbasic.Libraries
             FileSystem.DeleteFile(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
         }
 
-        private void Recycle(TFunctionData _sframe)
+        private static object Recycle(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            Recycle(_sframe.GetParameter<string>(1));
+            stackdat.AssertCount(2);
+            Recycle(stackdat.Get<string>(1));
+            return null;
         }
 
-        private void FileGetAttributes(TFunctionData _sframe)
+        private static object FileGetAttributes(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
-            string path = _sframe.GetParameter<string>(1);
+            stackdat.AssertCount(2);
+            string path = stackdat.Get<string>(1);
             FileAttributes current = File.GetAttributes(path);
-            _sframe.Data = GetStringFromAttributes(current);
+            return GetStringFromAttributes(current);
         }
 
-        private void FileSetAttributes(TFunctionData _sframe)
+        private static object FileSetAttributes(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(3);
-            string path = _sframe.GetParameter<string>(1);
+            stackdat.AssertCount(3);
+            string path = stackdat.Get<string>(1);
             FileAttributes current = File.GetAttributes(path);
             if ((current & FileAttributes.ReadOnly) == FileAttributes.ReadOnly) {
                 File.SetAttributes(path, current & ~FileAttributes.ReadOnly);
             }
-            FileAttributes attributes = GetAttributesFromString(_sframe.GetParameter<string>(2));
+            FileAttributes attributes = GetAttributesFromString(stackdat.Get<string>(2));
             File.SetAttributes(path, attributes);
-
+            return null;
         }
 
         private static string GetStringFromAttributes(FileAttributes attributes)
@@ -212,73 +223,64 @@ namespace Tbasic.Libraries
             return result;
         }
 
-        private void FileSetAccessDate(TFunctionData _sframe)
+        private static object FileSetAccessDate(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(3);
-            string path = _sframe.GetParameter<string>(1);
+            stackdat.AssertCount(3);
+            string path = stackdat.Get<string>(1);
             try {
                 if (File.Exists(path)) {
-                    File.SetLastAccessTime(path, DateTime.Parse(_sframe.GetParameter<string>(2)));
-                    _sframe.Data = File.GetLastAccessTime(path).ToString();
+                    File.SetLastAccessTime(path, DateTime.Parse(stackdat.Get<string>(2)));
+                    return File.GetLastAccessTime(path).ToString();
                 }
                 else if (Directory.Exists(path)) {
-                    Directory.SetLastAccessTime(path, DateTime.Parse(_sframe.GetParameter<string>(2)));
-                    _sframe.Data = Directory.GetLastAccessTime(path).ToString();
+                    Directory.SetLastAccessTime(path, DateTime.Parse(stackdat.Get<string>(2)));
+                    return Directory.GetLastAccessTime(path).ToString();
                 }
+                throw new FileNotFoundException();
             }
             catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException) {
-                throw new TbasicException(ErrorClient.NotFound, path, ex);
+                throw new FunctionException(ErrorClient.NotFound, path, ex);
             }
         }
 
-        private void FileSetModifiedDate(TFunctionData _sframe)
+        private static object FileSetModifiedDate(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(3);
-            string path = _sframe.GetParameter<string>(1);
+            stackdat.AssertCount(3);
+            string path = stackdat.Get<string>(1);
             try {
                 if (File.Exists(path)) {
-                    File.SetLastWriteTime(path, DateTime.Parse(_sframe.GetParameter<string>(2)));
-                    _sframe.Data = File.GetLastWriteTime(path).ToString();
+                    File.SetLastWriteTime(path, DateTime.Parse(stackdat.Get<string>(2)));
+                    return File.GetLastWriteTime(path).ToString();
                 }
                 else if (Directory.Exists(path)) {
-                    Directory.SetLastWriteTime(path, DateTime.Parse(_sframe.GetParameter<string>(2)));
-                    _sframe.Data = Directory.GetLastWriteTime(path).ToString();
+                    Directory.SetLastWriteTime(path, DateTime.Parse(stackdat.Get<string>(2)));
+                    return Directory.GetLastWriteTime(path).ToString();
                 }
+                throw new FileNotFoundException();
             }
             catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException) {
-                throw new TbasicException(ErrorClient.NotFound, path, ex);
+                throw new FunctionException(ErrorClient.NotFound, path, ex);
             }
         }
 
-        private void FileSetCreatedDate(TFunctionData _sframe)
+        private static object FileSetCreatedDate(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(3);
-            string path = _sframe.GetParameter<string>(1);
+            stackdat.AssertCount(3);
+            string path = stackdat.Get<string>(1);
             try {
                 if (File.Exists(path)) {
-                    File.SetCreationTime(path, DateTime.Parse(_sframe.GetParameter<string>(2)));
-                    _sframe.Data = File.GetCreationTime(path).ToString();
+                    File.SetCreationTime(path, DateTime.Parse(stackdat.Get<string>(2)));
+                    return File.GetCreationTime(path).ToString();
                 }
                 else if (Directory.Exists(path)) {
-                    Directory.SetCreationTime(path, DateTime.Parse(_sframe.GetParameter<string>(2)));
-                    _sframe.Data = Directory.GetCreationTime(path).ToString();
+                    Directory.SetCreationTime(path, DateTime.Parse(stackdat.Get<string>(2)));
+                    return Directory.GetCreationTime(path).ToString();
                 }
+                throw new FileNotFoundException();
             }
             catch(Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException) {
-                throw new TbasicException(ErrorClient.NotFound, path, ex);
+                throw new FunctionException(ErrorClient.NotFound, path, ex);
             }
-        }
-
-        private void DirectoryGetCurrent(TFunctionData _sframe)
-        {
-            _sframe.AssertParamCount(1);
-            _sframe.Data = Directory.GetCurrentDirectory();
-        }
-
-        private void DirectorySetCurrent(TFunctionData _sframe)
-        {
-            _sframe.AssertParamCount(2);
-            Directory.SetCurrentDirectory(_sframe.GetParameter<string>(1));
         }
 
         /// <summary>
@@ -316,12 +318,12 @@ namespace Tbasic.Libraries
             return Shell(cmd, Directory.GetCurrentDirectory(), out output);
         }
 
-        private void Shell(TFunctionData _sframe)
+        private static object Shell(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(2);
+            stackdat.AssertCount(2);
             string output;
-            _sframe.Status = Shell(_sframe.GetParameter<string>(1), out output);
-            _sframe.Data = output;
+            stackdat.Status = Shell(stackdat.Get<string>(1), out output);
+            return output;
         }
     }
 }

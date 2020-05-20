@@ -1,28 +1,17 @@
-﻿/**
- *  TBASIC
- *  Copyright (C) 2013-2016 Timothy Baxendale
- *  
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *  
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *  
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *  USA
- **/
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using System;
-using Tbasic.Runtime;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using Tbasic.Errors;
 using Tbasic.Parsing;
-using Tbasic.Components;
+using Tbasic.Runtime;
+using Tbasic.Types;
 
 namespace Tbasic.Libraries
 {
@@ -30,183 +19,197 @@ namespace Tbasic.Libraries
     {
         public StatementLibrary()
         {
-            Add("#include", Include);
-            Add("LET", Let);
-            Add("EXIT", Exit);
-            Add("BREAK", Break);
-            Add("DIM", DIM);
+            Add("LET", Let, evaluate: false);
+            Add("SET", Let, evaluate: false);
+            Add("DIM", DIM, evaluate: false);
+            Add("OPTION", Option, evaluate: false);
+            Add("OPT", Option, evaluate: false);
             Add("SLEEP", Sleep);
             Add("ELSE", UhOh);
             Add("END", UhOh);
             Add("WEND", UhOh);
+            Add("CONST", Const);
+            Add("EXIT", Exit);
+            Add("BREAK", Break);
+            Add("IMPORT", Include);
         }
 
-        private void Include(TFunctionData stackFrame)
+        private static object Include(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(2);
-            string path = Path.GetFullPath(stackFrame.GetParameter<string>(1));
-            if (!File.Exists(path)) {
-                throw new FileNotFoundException();
+            stackdat.AssertCount(2);
+            string path = Path.GetFullPath(stackdat.Evaluate<string>(1, runtime));
+
+            try {
+                IPreprocessor p;
+                using (StreamReader reader = new StreamReader(File.OpenRead(path))) {
+                    p = runtime.Preprocessor.Preprocess(runtime, reader);
+                }
+
+                if (p.Functions.Count > 0) {
+                    foreach (FunctionBlock func in p.Functions) {
+                        runtime.Context.AddFunction(func.Prototype.First(), func.Execute);
+                    }
+                }
+                if (p.Classes.Count > 0) {
+                    foreach (TClass t in p.Classes) {
+                        runtime.Context.AddClass(t.Name, t);
+                    }
+                }
+            }
+            catch(Exception ex) when (ex is TbasicRuntimeException || ex is IOException || ex is UnauthorizedAccessException) {
+                throw new TbasicRuntimeException("Unable to load library. " + ex.Message, ex);
             }
 
-            CodeBlock[] funcs;
-            LineCollection lines = Executer.ScanLines(File.ReadAllLines(path), out funcs);
-
-
-
-            NULL(stackFrame);
+            return NULL(runtime, stackdat);
         }
 
-        private void Sleep(TFunctionData stackFrame)
+        private static object Option(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(2);
-            System.Threading.Thread.Sleep(stackFrame.GetParameter<int>(1));
-            NULL(stackFrame);
-        }
+            if (stackdat.ParameterCount == 2)
+                stackdat.Add(true);
+            stackdat.AssertCount(3);
 
-        private void Break(TFunctionData stackFrame)
-        {
-            stackFrame.AssertParamCount(1);
-            stackFrame.StackExecuter.RequestBreak();
-            NULL(stackFrame);
-        }
-
-        internal void Exit(TFunctionData stackFrame)
-        {
-            stackFrame.AssertParamCount(1);
-            stackFrame.StackExecuter.RequestExit();
-            NULL(stackFrame);
-        }
-
-        internal static void NULL(TFunctionData stackFrame)
-        {
-            stackFrame.Context.PersistReturns(stackFrame);
-        }
-
-        internal void UhOh(TFunctionData stackFrame)
-        {
-            throw ThrowHelper.NoOpeningStatement(stackFrame.Text);
-        }
-
-        internal void DIM(TFunctionData stackFrame)
-        {
-            if (stackFrame.ParameterCount < 2) {
-                stackFrame.AssertParamCount(2);
+            string szOpt = stackdat.Get<string>(1);
+            ExecuterOption opt;
+            if (!Enum.TryParse(szOpt, out opt)) {
+                opt = stackdat.Get<ExecuterOption>(1); // this will throw an error if its not a valid flag
             }
 
-            StringSegment text = new StringSegment(stackFrame.Text);
-            Scanner scanner = new Scanner(text);
-            scanner.IntPosition += stackFrame.Name.Length;
-            scanner.SkipWhiteSpace();
-
-            Variable v;
-            if (!scanner.NextVariable(stackFrame.StackExecuter, out v))
-                throw ThrowHelper.InvalidVariableName();
-
-            string name = v.Name.ToString();
-            ObjectContext context = stackFrame.Context.FindVariableContext(name);
-            if (context == null) {
-                stackFrame.Context.SetVariable(name, array_alloc(v.Indices, 0));
+            if (stackdat.Evaluate<bool>(2, runtime)) {
+                runtime.EnableOption(opt);
             }
             else {
-                object obj = context.GetVariable(name);
-                array_realloc(ref obj, v.Indices, 0);
-                context.SetVariable(name, obj);
+                runtime.DisableOption(opt);
             }
-            NULL(stackFrame);
+            return NULL(runtime, stackdat);
         }
 
-        private object array_alloc(int[] sizes, int index)
+        private object Sleep(TRuntime runtime, StackData stackdat)
+        {
+            stackdat.AssertCount(2);
+            System.Threading.Thread.Sleep(stackdat.Get<int>(1));
+            return NULL(runtime, stackdat);
+        }
+
+        private object Break(TRuntime runtime, StackData stackdat)
+        {
+            stackdat.AssertCount(1);
+            runtime.RequestBreak();
+            return NULL(runtime, stackdat);
+        }
+
+        internal object Exit(TRuntime runtime, StackData stackdat)
+        {
+            stackdat.AssertCount(1);
+            runtime.RequestExit();
+            return NULL(runtime, stackdat);
+        }
+
+        internal static object NULL(TRuntime runtime, StackData stackdat)
+        {
+            runtime.Context.PersistReturns(stackdat);
+            return stackdat.ReturnValue;
+        }
+
+        internal object UhOh(TRuntime runtime, StackData stackdat)
+        {
+            throw ThrowHelper.NoOpeningStatement(stackdat.Text);
+        }
+
+        internal object DIM(TRuntime runtime, StackData stackdat)
+        {
+            stackdat.AssertAtLeast(2);
+            
+            IScanner scanner = runtime.Scanner.Scan(stackdat.Text);
+            scanner.Position += stackdat.Name.Length;
+            scanner.SkipWhiteSpace();
+
+            VariableEvaluator var_eval;
+            if (!DefaultScanner.NextVariable(scanner, runtime, out var_eval))
+                throw ThrowHelper.InvalidVariableName();
+
+            string name = var_eval.Name.ToString();
+            ObjectContext context = runtime.Context.FindVariableContext(name);
+            if (context == null) {
+                if (var_eval.Indices != null) {
+                    runtime.Context.SetVariable(name, array_alloc(var_eval.EvaluateIndices(), 0));
+                }
+                else {
+                    scanner.SkipWhiteSpace();
+                    if (!scanner.EndOfStream && scanner.Next("=")) {
+                        SetVariable(runtime, stackdat, false);
+                    }
+                    else {
+                        runtime.Context.SetVariable(name, null); // just declare it.
+                    }
+                }
+            }
+            else {
+                object value = context.GetVariable(name);
+                object[] array = value as object[];
+                if (array != null) {
+                    value = array_realloc(array, var_eval.EvaluateIndices(), 0);
+                }
+                context.SetVariable(name, value);
+            }
+            return NULL(runtime, stackdat);
+        }
+
+        private static object[] array_alloc(int[] sizes, int index)
         {
             if (index < sizes.Length) {
-                object[] o = new object[sizes[index]];
-                index++;
-                for (int i = 0; i < o.Length; i++) {
-                    o[i] = array_alloc(sizes, index);
+                object[] array = new object[sizes[index++]];
+                for (int i = 0; i < array.Length; ++i) {
+                    array[i] = array_alloc(sizes, index);
                 }
-                return o;
+                return array;
             }
             else {
                 return null;
             }
         }
 
-        private void array_realloc(ref object o, int[] sizes, int index)
+        private static object[] array_realloc(object[] o, int[] sizes, int index)
         {
+            if (o == null)
+                return null;
+            
+            object[] array = o as object[];
             if (o != null) {
-                if (o.GetType().IsArray) {
-                    object[] _aObj = (object[])o;
-                    if (index < sizes.Length) {
-                        Array.Resize<object>(ref _aObj, sizes[index]);
-                        index++;
-                        for (int i = 0; i < _aObj.Length; i++) {
-                            array_realloc(ref _aObj[i], sizes, index);
+                if (index < sizes.Length) {
+                    Array.Resize(ref array, sizes[index++]);
+                    for (int i = 0; i < array.Length; ++i) {
+                        object[] elem = array as object[];
+                        if (elem != null) {
+                            array[i] = array_realloc(elem, sizes, index);
                         }
-                        o = _aObj;
                     }
+                    return array;
                 }
                 else {
-                    o = array_alloc(sizes, index);
-                }
-            }
-        }
-
-        private void Let(TFunctionData stackFrame)
-        {
-            SetVariable(stackFrame, constant: false);
-        }
-
-        internal void Const(TFunctionData stackFrame)
-        {
-            SetVariable(stackFrame, constant: true);
-        }
-
-        private void SetVariable(TFunctionData stackFrame, bool constant)
-        {
-            if (stackFrame.ParameterCount < 4) {
-                stackFrame.AssertParamCount(4);
-            }
-
-            StringSegment text = new StringSegment(stackFrame.Text);
-
-            Scanner scanner = new Scanner(text);
-            scanner.IntPosition += stackFrame.Name.Length;
-            scanner.SkipWhiteSpace();
-
-            Variable v;
-            if (!scanner.NextVariable(stackFrame.StackExecuter, out v))
-                throw ThrowHelper.InvalidVariableName();
-
-            if (v.IsMacro)
-                throw ThrowHelper.MacroRedefined();
-
-            scanner.SkipWhiteSpace();
-
-            if (!scanner.Next("="))
-                throw ThrowHelper.InvalidDefinitionOperator();
-
-            Evaluator e = new Evaluator(text.Subsegment(scanner.IntPosition), stackFrame.StackExecuter);
-            object data = e.Evaluate();
-
-            if (v.Indices == null) {
-                if (!constant) {
-                    stackFrame.Context.SetVariable(v.Name.ToString(), data);
-                }
-                else {
-                    stackFrame.Context.SetConstant(v.Name.ToString(), data);
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
             }
             else {
-                if (constant)
-                    throw ThrowHelper.ArraysCannotBeConstant();
-                
-                ObjectContext context = stackFrame.Context.FindVariableContext(v.Name.ToString());
-                if (context == null)
-                    throw new ArgumentException("Array has not been defined and cannot be indexed");
-                context.SetArrayAt(v.Name.ToString(), data, v.Indices);
+                return array_alloc(sizes, index);
             }
+        }
 
-            NULL(stackFrame);
+        private object Let(TRuntime runtime, StackData stackdat)
+        {
+            return SetVariable(runtime, stackdat, constant: false);
+        }
+
+        internal object Const(TRuntime runtime, StackData stackdat)
+        {
+            return SetVariable(runtime, stackdat, constant: true);
+        }
+
+        private object SetVariable(TRuntime runtime, StackData stackdat, bool constant)
+        {
+            stackdat.AssertAtLeast(2);
+            ExpressionEvaluator eval = new ExpressionEvaluator(runtime);
+            return eval.Evaluate(stackdat.Text.Substring(stackdat.Name.Length));
         }
     }
 }

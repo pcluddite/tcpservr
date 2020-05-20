@@ -1,22 +1,8 @@
-﻿/**
- *  TBASIC
- *  Copyright (C) 2013-2016 Timothy Baxendale
- *  
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *  
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *  
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *  USA
- **/
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using System;
 using Tbasic.Runtime;
 
@@ -36,52 +22,52 @@ namespace Tbasic.Libraries
             Add("GetMillisecond", GetMillisecond);
         }
 
-        private void GetMonth(TFunctionData _sframe)
+        private object GetMonth(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
-            _sframe.Data = DateTime.Now.Month;
+            stackdat.AssertCount(1);
+            return DateTime.Now.Month;
         }
 
-        private void GetDay(TFunctionData _sframe)
+        private object GetDay(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
-            _sframe.Data = DateTime.Now.Day;
+            stackdat.AssertCount(1);
+            return DateTime.Now.Day;
         }
 
-        private void GetDayOfWeek(TFunctionData _sframe)
+        private object GetDayOfWeek(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
-            _sframe.Data = (int)DateTime.Now.DayOfWeek;
+            stackdat.AssertCount(1);
+            return (int)DateTime.Now.DayOfWeek;
         }
 
-        private void GetYear(TFunctionData _sframe)
+        private object GetYear(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
-            _sframe.Data = DateTime.Now.Year;
+            stackdat.AssertCount(1);
+            return DateTime.Now.Year;
         }
 
-        private void GetHour(TFunctionData _sframe)
+        private object GetHour(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
-            _sframe.Data = DateTime.Now.Hour;
+            stackdat.AssertCount(1);
+            return DateTime.Now.Hour;
         }
 
-        private void GetMinute(TFunctionData _sframe)
+        private object GetMinute(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
-            _sframe.Data = DateTime.Now.Minute;
+            stackdat.AssertCount(1);
+            return DateTime.Now.Minute;
         }
 
-        private void GetSecond(TFunctionData _sframe)
+        private object GetSecond(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
-            _sframe.Data = DateTime.Now.Second;
+            stackdat.AssertCount(1);
+            return DateTime.Now.Second;
         }
 
-        private void GetMillisecond(TFunctionData _sframe)
+        private object GetMillisecond(TRuntime runtime, StackData stackdat)
         {
-            _sframe.AssertParamCount(1);
-            _sframe.Data = DateTime.Now.Millisecond;
+            stackdat.AssertCount(1);
+            return DateTime.Now.Millisecond;
         }
     }
 }

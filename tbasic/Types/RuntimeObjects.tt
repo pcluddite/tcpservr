@@ -1,0 +1,87 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
+using System;
+
+namespace Tbasic.Types
+{
+    /// <summary>
+    /// An interface for a Tbasic object that can be handled at runtime
+    /// </summary>
+    public interface IRuntimeObject
+    {
+        /// <summary>
+        /// Gets the type of this object
+        /// </summary>
+        TbasicType TypeCode { get; }
+        /// <summary>
+        /// The object's value
+        /// </summary>
+        object Value { get; }
+    }
+
+<# BuildRuntimeObject("Boolean", "bool"); #>
+
+<# BuildRuntimeObject("EnumValue", "Enum"); #>
+
+<# BuildRuntimeObject("Native", "object", do_implicit: false); #>
+}
+
+<#+
+private void BuildRuntimeObject(string typecode, string systemType, bool do_implicit = true)
+{
+    string classname = "Tbasic" + typecode;
+#>
+    /// <summary>
+    /// Represents a <#= systemType #> in the runtime
+    /// </summary>
+    public struct <#= classname #> : IRuntimeObject
+    {
+        /// <summary>
+        /// The <#= systemType #> value
+        /// </summary>
+        public <#= systemType #> Value { get; }
+
+        /// <summary>
+        /// Initializes a new <#= classname #>
+        /// </summary>
+        public <#= classname #>(<#= systemType #> value)
+        {
+            Value = value;
+        }
+<#+ if (do_implicit) { #>
+
+        /// <summary>
+        /// Implicitly converts a <#= systemType #> to a <#= classname #>
+        /// </summary>
+        public static implicit operator <#= classname #>(<#= systemType #> value)
+        {
+            return new <#= classname #>(value);
+        }
+<#+ } #>
+
+        TbasicType IRuntimeObject.TypeCode
+        {
+            get {
+                return TbasicType.<#= typecode #>;
+            }
+        }
+
+        object IRuntimeObject.Value
+        {
+            get {
+                return Value;
+            }
+        }
+    }
+<#+
+}
+#>

@@ -1,23 +1,11 @@
-﻿/**
- *  TBASIC
- *  Copyright (C) 2013-2016 Timothy Baxendale
- *  
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *  
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *  
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *  USA
- **/
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using System;
+using System.Collections.Generic;
+using Tbasic.Parsing;
 
 namespace Tbasic
 {
@@ -35,19 +23,98 @@ namespace Tbasic
             return initial.EndsWith(other, ComparisonType);
         }
 
-        public static int IndexOfIgnoreCase(this string initial, string other, int start)
+        /// <summary>
+        /// Removes the first instance of a char onward. If the char isn't found, returns the original string.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static string RemoveFromChar(this string str, char c)
         {
-            return initial.IndexOf(other, start, ComparisonType);
+            int char_index = str.IndexOf(c);
+            if (char_index > -1) {
+                return str.Remove(char_index);
+            }
+            else {
+                return str;
+            }
         }
 
-        public static int SkipWhiteSpace(this string str, int start = 0)
+        /// <summary>
+        /// Removes the first instance of a char and everything before it. If the char isn't found, returns an empty string.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static string RemoveToChar(this string str, char c)
         {
-            for(int index = start; index < str.Length; ++index) {
-                if (!char.IsWhiteSpace(str[index])) {
-                    return index;
+            int char_index = str.IndexOf(c);
+            if (char_index < 0) {
+                return string.Empty;
+            }
+            else {
+                return str.Substring(0, char_index);
+            }
+        }
+
+        internal static IEnumerable<TOutput> TB_ConvertAll<TInput, TOutput>(this IEnumerable<TInput> enumerable, Converter<TInput, TOutput> conversion)
+        {
+            foreach (TInput item in enumerable)
+                yield return conversion(item);
+        }
+
+        internal static IEnumerable<string> TB_ToStrings(this IEnumerable<IEnumerable<char>> enumerable)
+        {
+            foreach (var item in enumerable)
+                yield return item.ToString();
+        }
+        
+        internal static IEnumerable<char> TB_Segment(this string source, int start, int count)
+        {
+            return StringSegment.Create(source, start, count);
+        }
+
+        /// <summary>
+        /// Gets a character at an index safely, by returning -1 instead of throwing an IndexOutOfRange exception
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        internal static int CharAt(this string s, int index)
+        {
+            if (index < 0 || index >= s.Length)
+                return -1;
+            return s[index];
+        }
+
+        internal static unsafe bool StartsWithFast(this string source, string test)
+        {
+            if (test.Length > source.Length)
+                return false; // we don't have enough material
+
+            fixed (char* lpsrc = source) fixed (char* lptest = test) {
+                for (int i = 0; i < test.Length; ++i) {
+                    if (lpsrc[i] != test[i]) {
+                        return false;
+                    }
                 }
             }
-            return -1;
+            return true;
+        }
+
+        internal static unsafe bool StartsWithFastIgnoreCase(this string source, string test)
+        {
+            if (test.Length > source.Length)
+                return false; // we don't have enough material
+
+            fixed (char* lpsrc = source) fixed (char* lptest = test) {
+                for (int i = 0; i < test.Length; ++i) {
+                    if (char.ToUpper(lpsrc[i]) != char.ToUpper(test[i])) {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }

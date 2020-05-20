@@ -1,22 +1,8 @@
-﻿/**
- *  TBASIC
- *  Copyright (C) 2013-2016 Timothy Baxendale
- *  
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *  
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *  
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- *  USA
- **/
+﻿// ======
+//
+// Copyright (c) Timothy Baxendale. All Rights Reserved.
+//
+// ======
 using System.Text;
 using System.Text.RegularExpressions;
 using Tbasic.Runtime;
@@ -44,129 +30,117 @@ namespace Tbasic.Libraries
             Add("StrInStr", Substring);
         }
 
-        private void CharsToString(TFunctionData stackFrame)
+        private object CharsToString(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(2);
+            stackdat.AssertCount(2);
             StringBuilder hanz = new StringBuilder();
-            foreach (char c in stackFrame.GetParameter<char[]>(1)) {
+            foreach (char c in stackdat.Get<char[]>(1)) {
                 hanz.Append(c);
             }
-            stackFrame.Data = hanz.ToString();
+            return hanz.ToString();
         }
 
-        private void ToCharArray(TFunctionData stackFrame)
+        private object ToCharArray(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(2);
-            stackFrame.Data = stackFrame.GetParameter<string>(1).ToCharArray();
+            stackdat.AssertCount(2);
+            return stackdat.Get<string>(1).ToCharArray();
         }
 
-        private void StringSplit(TFunctionData stackFrame)
+        private object StringSplit(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(3);
-            stackFrame.Data = Regex.Split(stackFrame.GetParameter(1).ToString(), stackFrame.GetParameter(2).ToString());
+            stackdat.AssertCount(3);
+            return Regex.Split(stackdat.Get(1).ToString(), stackdat.Get(2).ToString());
         }
 
-        private void Trim(TFunctionData stackFrame)
+        private object Trim(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(2);
-            stackFrame.Data = stackFrame.GetParameter(1).ToString().Trim();
+            stackdat.AssertCount(2);
+            return stackdat.Get(1).ToString().Trim();
         }
 
-        private void TrimStart(TFunctionData stackFrame)
+        private object TrimStart(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(2);
-            stackFrame.Data = stackFrame.GetParameter(1).ToString().TrimStart();
+            stackdat.AssertCount(2);
+            return stackdat.Get(1).ToString().TrimStart();
         }
 
-        private void TrimEnd(TFunctionData stackFrame)
+        private object TrimEnd(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(2);
-            stackFrame.Data = stackFrame.GetParameter(1).ToString().TrimEnd();
+            stackdat.AssertCount(2);
+            return stackdat.Get(1).ToString().TrimEnd();
         }
 
-        private void StringContains(TFunctionData stackFrame)
+        private object StringContains(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(3);
-            stackFrame.Data = stackFrame.GetParameter<string>(1).Contains(stackFrame.GetParameter<string>(2));
+            stackdat.AssertCount(3);
+            return stackdat.Get<string>(1).Contains(stackdat.Get<string>(2));
         }
 
-        private void StringCompare(TFunctionData stackFrame)
+        private object StringCompare(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(3);
-            stackFrame.Data = stackFrame.GetParameter<string>(1).CompareTo(stackFrame.GetParameter<string>(2));
+            stackdat.AssertCount(3);
+            return stackdat.Get<string>(1).CompareTo(stackdat.Get<string>(2));
         }
 
-        private void StringIndexOf(TFunctionData stackFrame)
+        private object StringIndexOf(TRuntime runtime, StackData stackdat)
         {
-            if (stackFrame.ParameterCount == 3) {
-                stackFrame.AddParameter(0);
+            if (stackdat.ParameterCount == 3) {
+                stackdat.Add(0);
             }
-            if (stackFrame.ParameterCount == 4) {
-                stackFrame.AddParameter(stackFrame.GetParameter<string>(1).Length);
+            if (stackdat.ParameterCount == 4) {
+                stackdat.Add(stackdat.Get<string>(1).Length);
             }
-            stackFrame.AssertParamCount(5);
-            char? cObj = stackFrame.GetParameter(2) as char?;
-            if (cObj == null) {
-                stackFrame.Data = stackFrame.GetParameter<string>(1).IndexOf(stackFrame.GetParameter<string>(2), stackFrame.GetParameter<int>(3), stackFrame.GetParameter<int>(4));
-            }
-            else {
-                stackFrame.Data = stackFrame.GetParameter<string>(1).IndexOf(cObj.Value, stackFrame.GetParameter<int>(3), stackFrame.GetParameter<int>(4));
-            }
+            stackdat.AssertCount(5);
+            return stackdat.Get<string>(1).IndexOf(stackdat.Get<string>(2), stackdat.Get<int>(3), stackdat.Get<int>(4));
         }
 
-        private void StringLastIndexOf(TFunctionData stackFrame)
+        private object StringLastIndexOf(TRuntime runtime, StackData stackdat)
         {
-            if (stackFrame.ParameterCount == 3) {
-                stackFrame.AddParameter(0);
+            if (stackdat.ParameterCount == 3) {
+                stackdat.Add(0);
             }
-            if (stackFrame.ParameterCount == 4) {
-                stackFrame.AddParameter(stackFrame.GetParameter<string>(1).Length);
+            if (stackdat.ParameterCount == 4) {
+                stackdat.Add(stackdat.Get<string>(1).Length);
             }
-            stackFrame.AssertParamCount(5);
-            char? cObj = stackFrame.GetParameter(2) as char?;
-            if (cObj == null) {
-                stackFrame.Data = stackFrame.GetParameter<string>(1).LastIndexOf(stackFrame.GetParameter<string>(2), stackFrame.GetParameter<int>(3), stackFrame.GetParameter<int>(4));
-            }
-            else {
-                stackFrame.Data = stackFrame.GetParameter<string>(1).LastIndexOf(cObj.Value, stackFrame.GetParameter<int>(3), stackFrame.GetParameter<int>(4));
-            }
+            stackdat.AssertCount(5);
+            return stackdat.Get<string>(1).LastIndexOf(stackdat.Get<string>(2), stackdat.Get<int>(3), stackdat.Get<int>(4));
         }
 
-        private void StringUpper(TFunctionData stackFrame)
+        private object StringUpper(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(2);
-            stackFrame.Data = stackFrame.GetParameter<string>(1).ToUpper();
+            stackdat.AssertCount(2);
+            return stackdat.Get<string>(1).ToUpper();
         }
 
-        private void StringLower(TFunctionData stackFrame)
+        private object StringLower(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(2);
-            stackFrame.Data = stackFrame.GetParameter<string>(1).ToLower();
+            stackdat.AssertCount(2);
+            return stackdat.Get<string>(1).ToLower();
         }
 
-        private void StringLeft(TFunctionData stackFrame)
+        private object StringLeft(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(3);
-            stackFrame.Data = stackFrame.GetParameter<string>(1).Substring(stackFrame.GetParameter<int>(2));
+            stackdat.AssertCount(3);
+            return stackdat.Get<string>(1).Substring(stackdat.Get<int>(2));
         }
 
-        private void StringRight(TFunctionData stackFrame)
+        private object StringRight(TRuntime runtime, StackData stackdat)
         {
-            stackFrame.AssertParamCount(3);
-            stackFrame.Data = stackFrame.GetParameter<string>(1).Remove(stackFrame.GetParameter<int>(2));
+            stackdat.AssertCount(3);
+            return stackdat.Get<string>(1).Remove(stackdat.Get<int>(2));
         }
 
-        private void Substring(TFunctionData stackFrame)
+        private object Substring(TRuntime runtime, StackData stackdat)
         {
-            if (stackFrame.ParameterCount == 3) {
-                stackFrame.Data = stackFrame.GetParameter<string>(1).Substring(
-                                    stackFrame.GetParameter<int>(2)
+            if (stackdat.ParameterCount == 3) {
+                return stackdat.Get<string>(1).Substring(
+                                    stackdat.Get<int>(2)
                                     );
             }
             else {
-                stackFrame.AssertParamCount(4);
-                stackFrame.Data = stackFrame.GetParameter<string>(1).Substring(
-                                    stackFrame.GetParameter<int>(2), stackFrame.GetParameter<int>(3)
+                stackdat.AssertCount(4);
+                return stackdat.Get<string>(1).Substring(
+                                    stackdat.Get<int>(2), stackdat.Get<int>(3)
                                     );
             }
         }
