@@ -9,7 +9,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Tcpservr
+namespace TCPSERVR
 {
     public class Http
     {

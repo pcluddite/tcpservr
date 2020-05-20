@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Tcpservr.Messaging
+namespace TCPSERVR.Messaging
 {
     public class MessageReceiver : IDisposable
     {

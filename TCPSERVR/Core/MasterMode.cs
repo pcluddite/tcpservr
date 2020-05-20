@@ -11,12 +11,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Tbasic.Errors;
-using Tcpservr.Errors;
-using Tcpservr.Libraries;
-using Tcpservr.Messaging;
-using Tcpservr.Threads;
 
-namespace Tcpservr.Core
+using TCPSERVR.Errors;
+using TCPSERVR.Libraries;
+using TCPSERVR.Messaging;
+using TCPSERVR.Threads;
+
+namespace TCPSERVR.Core
 {
     public class MasterMode : ServerMode
     {

@@ -5,11 +5,11 @@
 // ======
 using System;
 using System.Threading;
-using Tcpservr.Components;
-using Tcpservr.Core;
-using Tcpservr.Messaging;
+using TCPSERVR.Components;
+using TCPSERVR.Core;
+using TCPSERVR.Messaging;
 
-namespace Tcpservr.Threads
+namespace TCPSERVR.Threads
 {
     public class ThreadInfo
     {

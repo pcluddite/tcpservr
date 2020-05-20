@@ -6,7 +6,7 @@
 using Newtonsoft.Json;
 using Tbasic.Errors;
 
-namespace Tcpservr.Messaging
+namespace TCPSERVR.Messaging
 {
     /// <summary>
     /// A message that is sent from the server

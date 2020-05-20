@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Tcpservr.Messaging
+namespace TCPSERVR.Messaging
 {
     public class CommandLine : IList<string>, ICloneable
     {

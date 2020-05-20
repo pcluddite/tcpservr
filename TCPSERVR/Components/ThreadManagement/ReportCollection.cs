@@ -7,9 +7,10 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Tbasic.Errors;
-using Tcpservr.Messaging;
 
-namespace Tcpservr.Threads
+using TCPSERVR.Messaging;
+
+namespace TCPSERVR.Threads
 {
     /// <summary>
     /// Manages a collection of reports of ServerInputMessages. This class is designed to be thread-safe.

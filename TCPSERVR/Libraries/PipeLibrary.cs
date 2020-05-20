@@ -12,12 +12,13 @@ using System.Threading;
 using Tbasic.Errors;
 using Tbasic.Libraries;
 using Tbasic.Runtime;
-using Tcpservr.Components.Win32;
-using Tcpservr.Core;
-using Tcpservr.Messaging;
-using Tcpservr.Threads;
 
-namespace Tcpservr.Libraries
+using TCPSERVR.Components.Win32;
+using TCPSERVR.Core;
+using TCPSERVR.Messaging;
+using TCPSERVR.Threads;
+
+namespace TCPSERVR.Libraries
 {
     public class PipeLibrary : Library
     {

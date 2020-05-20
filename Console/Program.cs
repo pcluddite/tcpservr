@@ -6,9 +6,10 @@
 using Newtonsoft.Json;
 using System;
 using System.Net.Sockets;
-using Tcpservr.Messaging;
 
-namespace Tcpservr.Terminal
+using TCPSERVR.Messaging;
+
+namespace TCPSERVR.Terminal
 {
     public class Program
     {

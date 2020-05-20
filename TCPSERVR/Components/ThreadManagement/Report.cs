@@ -6,7 +6,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tcpservr.Threads
+namespace TCPSERVR.Threads
 {
     public class Report
     {

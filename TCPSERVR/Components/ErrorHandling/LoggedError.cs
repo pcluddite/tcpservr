@@ -7,7 +7,7 @@ using System;
 using System.Security.Principal;
 using System.Text;
 
-namespace Tcpservr.Errors
+namespace TCPSERVR.Errors
 {
     public class LoggedError
     {

@@ -7,7 +7,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace Tcpservr.Components
+namespace TCPSERVR.Components
 {
     internal static class Extensions
     {

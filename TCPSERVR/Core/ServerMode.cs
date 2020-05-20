@@ -9,11 +9,12 @@ using System.Threading;
 using Tbasic.Errors;
 using Tbasic.Parsing;
 using Tbasic.Runtime;
-using Tcpservr.Libraries;
-using Tcpservr.Messaging;
-using Tcpservr.Threads;
 
-namespace Tcpservr.Core
+using TCPSERVR.Libraries;
+using TCPSERVR.Messaging;
+using TCPSERVR.Threads;
+
+namespace TCPSERVR.Core
 {
     public abstract class ServerMode
     {

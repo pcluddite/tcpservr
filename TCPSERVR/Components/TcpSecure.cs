@@ -12,7 +12,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 
-namespace Tcpservr.Components
+namespace TCPSERVR.Components
 {
     public class TcpSecure : IDisposable
     {

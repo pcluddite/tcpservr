@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Tcpservr.Components
+namespace TCPSERVR.Components
 {
     public class ArgumentManager : IDictionary<string, string>
     {

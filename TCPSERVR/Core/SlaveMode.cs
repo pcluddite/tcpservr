@@ -9,12 +9,13 @@ using System.Collections.Concurrent;
 using System.IO.Pipes;
 using System.Threading;
 using Tbasic.Errors;
-using Tcpservr.Errors;
-using Tcpservr.Libraries;
-using Tcpservr.Messaging;
-using Tcpservr.Threads;
 
-namespace Tcpservr.Core
+using TCPSERVR.Errors;
+using TCPSERVR.Libraries;
+using TCPSERVR.Messaging;
+using TCPSERVR.Threads;
+
+namespace TCPSERVR.Core
 {
     public class SlaveMode : ServerMode
     {

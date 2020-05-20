@@ -11,7 +11,7 @@ using System.Diagnostics;
 using System.Text;
 using Tbasic.Errors;
 
-namespace Tcpservr.Threads
+namespace TCPSERVR.Threads
 {
     /// <summary>
     /// Manages a collection of threads. This class should be thread-safe.

@@ -8,9 +8,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using Tcpservr.Messaging;
 
-namespace Tcpservr.Terminal
+using TCPSERVR.Messaging;
+
+namespace TCPSERVR.Terminal
 {
     public static class Command
     {

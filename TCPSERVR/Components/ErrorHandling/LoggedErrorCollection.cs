@@ -8,7 +8,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tcpservr.Errors
+namespace TCPSERVR.Errors
 {
     /// <summary>
     /// Manages logged errors. This class should be thread safe.

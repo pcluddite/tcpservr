@@ -8,9 +8,10 @@ using System;
 using System.Diagnostics;
 using System.Net;
 using System.Windows.Forms;
-using Tcpservr.Core;
 
-namespace Tcpservr
+using TCPSERVR.Core;
+
+namespace TCPSERVR
 {
     public class Installer
     {

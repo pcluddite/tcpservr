@@ -8,10 +8,11 @@ using System.Threading;
 using Tbasic.Errors;
 using Tbasic.Libraries;
 using Tbasic.Runtime;
-using Tcpservr.Core;
-using Tcpservr.Errors;
 
-namespace Tcpservr.Libraries
+using TCPSERVR.Core;
+using TCPSERVR.Errors;
+
+namespace TCPSERVR.Libraries
 {
     public class UserIOLibServer : Library
     {

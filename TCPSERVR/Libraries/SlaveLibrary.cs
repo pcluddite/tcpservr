@@ -7,10 +7,11 @@ using System;
 using Tbasic.Errors;
 using Tbasic.Libraries;
 using Tbasic.Runtime;
-using Tcpservr.Core;
-using Tcpservr.Messaging;
 
-namespace Tcpservr.Libraries
+using TCPSERVR.Core;
+using TCPSERVR.Messaging;
+
+namespace TCPSERVR.Libraries
 {
     public class SlaveLibrary : Library
     {

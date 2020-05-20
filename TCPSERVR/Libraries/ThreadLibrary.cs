@@ -9,11 +9,11 @@ using System.Threading;
 using Tbasic.Errors;
 using Tbasic.Libraries;
 using Tbasic.Runtime;
-using Tcpservr.Components;
-using Tcpservr.Core;
-using Tcpservr.Threads;
+using TCPSERVR.Components;
+using TCPSERVR.Core;
+using TCPSERVR.Threads;
 
-namespace Tcpservr.Libraries
+namespace TCPSERVR.Libraries
 {
     public class ThreadLibrary : Library
     {

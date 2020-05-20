@@ -8,7 +8,7 @@ using System;
 using Tbasic.Parsing;
 using Tbasic.Runtime;
 
-namespace Tcpservr.Messaging
+namespace TCPSERVR.Messaging
 {
     /// <summary>
     /// A message that is sent to the server

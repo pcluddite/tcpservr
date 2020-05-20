@@ -11,12 +11,13 @@ using System.Windows.Forms;
 using Tbasic.Errors;
 using Tbasic.Libraries;
 using Tbasic.Runtime;
-using Tcpservr.Core;
-using Tcpservr.Errors;
-using Tcpservr.Libraries;
-using Tcpservr.Messaging;
 
-namespace Tcpservr
+using TCPSERVR.Core;
+using TCPSERVR.Errors;
+using TCPSERVR.Libraries;
+using TCPSERVR.Messaging;
+
+namespace TCPSERVR
 {
     public class Program
     {

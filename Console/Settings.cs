@@ -14,7 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace Tcpservr.Terminal
+namespace TCPSERVR.Terminal
 {
     public class Settings
     {

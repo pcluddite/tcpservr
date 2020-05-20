@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Tcpservr.Properties {
+namespace TCPSERVR.Properties {
     using System;
     
     

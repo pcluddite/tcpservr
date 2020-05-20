@@ -6,9 +6,10 @@
 using Newtonsoft.Json;
 using System.IO;
 using System.Net;
-using Tcpservr.Core;
 
-namespace Tcpservr
+using TCPSERVR.Core;
+
+namespace TCPSERVR
 {
     public class ServerSettings
     {
